@@ -1,0 +1,26 @@
+{
+    "name": "waynelogic/filament-cms",
+    "description": "Filament CMS",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Waynelogic\\FilamentCms\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "waynelogic",
+            "email": "90955971+waynelogic@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Waynelogic\\FilamentCms\\FilamentCmsServiceProvider"
+            ]
+        }
+    }
+}

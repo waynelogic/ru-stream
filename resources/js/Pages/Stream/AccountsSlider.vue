@@ -1,0 +1,99 @@
+<script setup>
+import {inject, onMounted, reactive, ref, watch, nextTick} from "vue";
+import {router, usePage} from "@inertiajs/vue3";
+import Swiper from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
+import Button from "@/Components/Actions/Button.vue";
+import {PhArrowLeft, PhArrowRight, PhPlusCircle} from "@phosphor-icons/vue";
+import AccountCard from "@/Pages/Stream/Partials/AccountCard.vue";
+import {useFlash} from "@/Utils/useFlash.js";
+
+const props = defineProps({
+    title: {
+        type: String,
+        required: true
+    },
+    accounts: Object
+})
+const page = usePage();
+
+const swiperEl = ref(null)
+const swiper = ref(null)
+
+const swiperOptions = {
+    modules: [Navigation],
+    init: false,
+    slidesPerView: 1,
+    spaceBetween: 16,
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+        640: { slidesPerView: 2 },
+        768: { slidesPerView: 2 },
+        992: { slidesPerView: 2 },
+        1200: { slidesPerView: 3 }
+    }
+}
+function initSwiper() {
+    swiper.value = new Swiper(swiperEl.value, swiperOptions)
+    swiper.value.init()
+}
+
+onMounted(() => {
+    initSwiper()
+})
+
+watch(() => props.accounts, async () => {
+    if (!swiper.value) return;
+    swiper.value.destroy();
+    await nextTick();
+    initSwiper();
+});
+const openAttach = inject('openAttach')
+
+function openStreamCreator(account_id) {
+    if (page.props.videoCount === 0) {
+        useFlash().error('У вас нет ни одного видео. Добавьте их на домашней странице')
+    } else {
+        router.visit(route('streams.create', { type: page.props.type, account_id: account_id}))
+    }
+}
+</script>
+
+<template>
+    <section>
+        <div class="swiper accounts-swiper" ref="swiperEl">
+            <header class="flex items-center justify-between mb-4">
+                <h3 class="text-lg md:text-2xl font-serif font-medium">{{ title }}</h3>
+                <div class="flex gap-5">
+                    <div class="swiper-button-prev">
+                        <PhArrowLeft class="size-6"/>
+                    </div>
+                    <div class="swiper-button-next">
+                        <PhArrowRight class="size-6"/>
+                    </div>
+                </div>
+            </header>
+            <div class="swiper-wrapper">
+                <div class="swiper-slide flex flex-col space-y-4" v-for="account in accounts">
+                    <AccountCard :account="account"/>
+                    <button @click="openStreamCreator(account.id)" class="flex items-center justify-center box border-2 rounded-xl p-4 duration-300 hover:bg-primary-800">
+                        <PhPlusCircle class="size-8"/>
+                    </button>
+                </div>
+                <div class="swiper-slide">
+                    <button @click="openAttach" class="w-full flex items-center box p-3 rounded-xl border-2 duration-300 hover:bg-primary-800">
+                        <PhPlusCircle class="size-10"/>
+                        <span class="ml-2">Добавить аккаунт</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
+
+<style scoped>
+
+</style>
