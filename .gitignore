@@ -4,6 +4,8 @@
 /public/build
 /public/hot
 /public/storage
+/public/session.madeline
+/public/MadelineProto.log
 /storage/*.key
 /storage/pail
 /vendor
