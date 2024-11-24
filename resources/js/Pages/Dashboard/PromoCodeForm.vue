@@ -20,7 +20,7 @@ function submit() {
 
 <template>
 
-    <form @submit.prevent="submit" class="box flex flex-col space-y-4 p-4 h-full">
+    <form @submit.prevent="submit" class="box flex flex-col space-y-4 p-4">
         <h3 class="font-serif font-semibold">Активация промокода</h3>
         <TextInput class="mt-auto" v-model="form.code" type="number" placeholder="Введите промокод"/>
         <InputError :message="form.errors.code" class="mt-2"/>

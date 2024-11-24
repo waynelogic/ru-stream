@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\SubscriptionResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -32,6 +33,7 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'subscriptions' => SubscriptionResource::collection(auth()->user()?->subscriptions()->get() ?? collect()),
             'flashy' => session('flashy'),
             'data' => session('data'),
             'ziggy' => fn () => [

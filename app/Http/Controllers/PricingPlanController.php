@@ -12,7 +12,9 @@ class PricingPlanController extends Controller
     {
         $arPricingPlans = PricingPlan::query()->get();
 
-        return inertia('App/PricingPlans', [
+        $user = auth()->user();
+
+        return inertia($user ? 'App/PricingPlans' : 'Guest/PricingPlans', [
             'pricingPlans' => PricingPlanResource::collection($arPricingPlans)
         ]);
     }

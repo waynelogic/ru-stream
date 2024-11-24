@@ -1,17 +1,65 @@
 <?php namespace App\Concerns;
 
+use App\Models\Certificate;
+use App\Models\PromoCode;
 use App\Models\Social\VkUser;
 use App\Models\Story;
+use App\Models\Subscription;
+use App\Models\User;
 use App\Models\Video;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Waynelogic\FilamentCms\Database\Traits\Sluggable;
 
 trait Client
 {
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+    use Sluggable;
+
+
+
+    public $slugs = [
+        'login' => 'email_login',
     ];
+//    protected $fillable = [
+//        'name',
+//        'email',
+//        'password',
+//        'email_login',
+//        'login',
+//    ];
+
+    public function getEmailLoginAttribute()
+    {
+        return trim(strstr($this->email,'@',true));
+    }
+
+    public function referred() : HasMany
+    {
+        return $this->hasMany(User::class, 'partner_id');
+    }
+
+    public function promo_codes() : BelongsToMany
+    {
+        return $this
+            ->belongsToMany(PromoCode::class, 'promo_code_user', 'user_id', 'promo_code_id')
+            ->withTimestamps();
+    }
+    public function certificates() : BelongsToMany
+    {
+        return $this->belongsToMany(Certificate::class, 'certificate_user', 'user_id', 'certificate_id')
+            ->withPivot('is_used', 'options');
+    }
+
+
+    public function partner() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'partner_id');
+    }
+    public function subscriptions() : HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
 
     public function videos() : HasMany
     {

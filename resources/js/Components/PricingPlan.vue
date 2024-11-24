@@ -6,6 +6,7 @@ import {money} from "@/Utils/money.js";
 import {router} from "@inertiajs/vue3";
 const props = defineProps({
     plan: Object,
+    currentTypePlan: Object,
     type: Object,
     frequency: Object
 })
@@ -14,6 +15,15 @@ const submit = () => {
     router.post(route('subscriptions.store'), {
         plan: props.plan.id,
         frequency: props.frequency.value
+    }, {
+        preserveScroll: true
+    })
+}
+const toggleAutorenew = () => {
+    router.patch(route('subscriptions.update', props.currentTypePlan.id), {
+        auto_renew: !props.currentTypePlan.auto_renew
+    }, {
+        preserveScroll: true
     })
 }
 </script>
@@ -55,8 +65,13 @@ const submit = () => {
             <span class="text-3xl font-bold tracking-tight text-white">{{ money(plan.price[frequency.value]) }}</span>
             <span class="text-sm font-semibold leading-6 text-gray-300">{{ frequency.priceSuffix }}</span>
         </p>
-        <Button @click="submit" color="primary" class="mt-6 w-full">
-            Подписаться
+        <Button v-if="!currentTypePlan || currentTypePlan.pp_id !== plan.id" @click="submit" color="primary" class="mt-6 w-full">
+            {{ currentTypePlan ? 'Переоформить' : 'Подписаться' }}
+        </Button>
+        <Button v-else :color="currentTypePlan.auto_renew ? 'gray' : 'danger'" @click="toggleAutorenew" class="mt-6 w-full">
+            <span class="text-primary-950">
+                {{ currentTypePlan.auto_renew ? 'Отменить автопродление' : 'Включить автопродление' }}
+            </span>
         </Button>
     </div>
 </template>

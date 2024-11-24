@@ -3,7 +3,7 @@ import {computed, provide, ref} from "vue";
 import {router, useForm} from "@inertiajs/vue3";
 import {PhUserCirclePlus} from "@phosphor-icons/vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import AccountsSlider from "@/Pages/Stream/AccountsSlider.vue";
+import AccountsSlider from "@/Pages/Stream/Partials/AccountsSlider.vue";
 import Modal from "@/Components/Actions/Modal.vue";
 import Button from "@/Components/Actions/Button.vue";
 
@@ -45,8 +45,8 @@ provide('openAttach', openAttach)
                     <div class="flex flex-col gap-4">
                         <label class="flex items-center gap-4 box rounded-md px-4 py-2 has-[:checked]:bg-primary-800 duration-300 cursor-pointer" v-for="account in notAttachedAccounts">
                             <input v-model="form.account_id" class="hidden" type="radio" name="account" :value="account.id">
-                            <img :src="account.avatar" class="size-8 rounded-full" alt="profile">
-                            <span class="font-serif font-semibold">{{ account.name }}</span>
+                            <img :src="account.view_avatar" class="size-8 rounded-full" alt="profile">
+                            <span class="font-serif font-semibold">{{ account.view_name }}</span>
                         </label>
                         <label class="flex items-center gap-4 box rounded-md px-4 py-2 has-[:checked]:bg-primary-800 duration-300 cursor-pointer">
                             <input v-model="form.account_id" class="hidden" type="radio" name="account" value="new">

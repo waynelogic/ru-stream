@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             // Money
             $table->decimal('balance', 10, 2)->default(0);
+            $table->string('login')->nullable()->unique()->after('email');
             // Data
             $table->foreignId('partner_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('phone')->nullable();
@@ -29,7 +30,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['balance', 'phone', 'sex', 'referral_link_count']);
+            $table->dropColumn(['login', 'balance', 'phone', 'sex', 'referral_link_count']);
             $table->dropForeign(['partner_id']);
         });
     }

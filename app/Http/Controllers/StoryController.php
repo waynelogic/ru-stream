@@ -71,7 +71,15 @@ class StoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => ['required', 'max:50'],
+        ]);
+
+        $obVideo = Story::find($id);
+        $obVideo->title = (string) $request->title;
+        $obVideo->save();
+
+        return back()->flashSuccess('История обновлена');
     }
 
     /**
@@ -79,9 +87,12 @@ class StoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $obStory = Story::query()->find($id);
-        $obStory->delete();
+        $obVideo = Story::find($id);
+        if ($obVideo->streams()->exists()) {
+            return back()->flashError('Невозможно удалить видео, так как оно связано с активным стримом.');
+        }
+        $obVideo->delete();
 
-        return back()->flashSuccess('История удалена');
+        return back()->flashSuccess('Видео удалено');
     }
 }

@@ -51,7 +51,7 @@ watch(form, () => form.file && (form.title = basename(form.file.name).slice(0, 5
 </script>
 
 <template>
-    <div class="flex flex-col gap-2 box self-start" :id="isNew ? 'new-video-card' : 'video-' + video.id">
+    <div class="flex flex-col gap-2 box self-start  overflow-hidden" :id="isNew ? 'new-video-card' : 'video-' + video.id">
         <form class="relative" @submit.prevent="submit" enctype="multipart/form-data">
             <video v-if="!isNew" class="aspect-video w-full" width="100%" height="auto" :poster="video.poster_url" controls>
                 <source :src="video.video_url" type="video/mp4">
@@ -67,7 +67,7 @@ watch(form, () => form.file && (form.title = basename(form.file.name).slice(0, 5
                 <!-- Inputs -->
                 <template v-if="isEditing">
                     <label v-if="isNew" class="flex flex-col">
-                        <input class="form-control" type="file" id="file" accept="video/*" required @input="form.file = $event.target.files[0]"/>
+                        <input class="form-control" placeholder="Выберите видео" type="file" id="file" accept="video/*" required @input="form.file = $event.target.files[0]"/>
                         <span v-if="form.errors.file" class="text-sm">{{ form.errors.file }}</span>
                     </label>
                     <div class="flex flex-col">

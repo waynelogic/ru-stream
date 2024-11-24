@@ -18,7 +18,6 @@
             <tr v-else>
                 <td colspan="100%" class="text-center text-gray-500 py-4">Нет данных</td>
             </tr>
-
         </tbody>
     </table>
 </template>

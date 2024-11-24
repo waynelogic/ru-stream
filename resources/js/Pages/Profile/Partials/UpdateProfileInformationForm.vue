@@ -8,6 +8,9 @@ import InputLabel from '@/Components/Form/InputLabel.vue';
 import PrimaryButton from '@/Components/Auth/PrimaryButton.vue';
 import SecondaryButton from '@/Components/Auth/SecondaryButton.vue';
 import TextInput from '@/Components/Form/TextInput.vue';
+import FormLabel from "@/Components/Form/FormLabel.vue";
+import LinkButton from "@/Components/Actions/LinkButton.vue";
+import Button from "@/Components/Actions/Button.vue";
 
 const props = defineProps({
     user: Object,
@@ -78,11 +81,11 @@ const clearPhotoFileInput = () => {
 <template>
     <FormSection @submitted="updateProfileInformation">
         <template #title>
-            Profile Information
+            Информация профиля
         </template>
 
         <template #description>
-            Update your account's profile information and email address.
+            Обновите данные профиля и адрес электронной почты вашей учетной записи.
         </template>
 
         <template #form>
@@ -113,7 +116,7 @@ const clearPhotoFileInput = () => {
                 </div>
 
                 <SecondaryButton class="mt-2 me-2" type="button" @click.prevent="selectNewPhoto">
-                    Select A New Photo
+                    Выбрать новую фотографию
                 </SecondaryButton>
 
                 <SecondaryButton
@@ -122,7 +125,7 @@ const clearPhotoFileInput = () => {
                     class="mt-2"
                     @click.prevent="deletePhoto"
                 >
-                    Remove Photo
+                    Удалить фотографию
                 </SecondaryButton>
 
                 <InputError :message="form.errors.photo" class="mt-2" />
@@ -130,48 +133,48 @@ const clearPhotoFileInput = () => {
 
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="name" value="Name" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="name"
-                />
-                <InputError :message="form.errors.name" class="mt-2" />
+                <FormLabel value="Имя" :message="form.errors.name">
+                    <TextInput
+                        id="name"
+                        v-model="form.name"
+                        type="text"
+                        class="mt-1 block w-full"
+                        required
+                        autocomplete="name"
+                    />
+                </FormLabel>
             </div>
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="username"
-                />
-                <InputError :message="form.errors.email" class="mt-2" />
+                <FormLabel value="E-mail" :message="form.errors.email">
+                    <TextInput
+                        id="email"
+                        v-model="form.email"
+                        type="email"
+                        class="mt-1 block w-full"
+                        required
+                        autocomplete="username"
+                    />
+                </FormLabel>
 
                 <div v-if="$page.props.jetstream.hasEmailVerification && user.email_verified_at === null">
                     <p class="text-sm mt-2">
-                        Your email address is unverified.
+                        Ваш адрес электронной почты не подтвержден.
 
-                        <Link
+                        <LinkButton
                             :href="route('verification.send')"
                             method="post"
                             as="button"
                             class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             @click.prevent="sendEmailVerification"
                         >
-                            Click here to re-send the verification email.
-                        </Link>
+                            Нажмите здесь, чтобы повторно отправить письмо с подтверждением.
+                        </LinkButton>
                     </p>
 
                     <div v-show="verificationLinkSent" class="mt-2 font-medium text-sm text-green-600">
-                        A new verification link has been sent to your email address.
+                        На ваш адрес электронной почты была отправлена новая ссылка для подтверждения.
                     </div>
                 </div>
             </div>
@@ -182,9 +185,9 @@ const clearPhotoFileInput = () => {
                 Saved.
             </ActionMessage>
 
-            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
-            </PrimaryButton>
+            <Button size="md" text-size="sm" :disabled="form.processing">
+                Сохранить
+            </Button>
         </template>
     </FormSection>
 </template>

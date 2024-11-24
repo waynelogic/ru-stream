@@ -36,6 +36,7 @@ enum StreamType: string implements HasColor, HasLabel
         };
     }
 
+
     public function attachmentColumn(): ?string
     {
         return match ($this) {
@@ -63,5 +64,10 @@ enum StreamType: string implements HasColor, HasLabel
             'handle' => $type->name,
             'value' => $type->value,
         ];
+    }
+
+    public function isStory()
+    {
+        return in_array($this, [self::VKStories]);
     }
 }

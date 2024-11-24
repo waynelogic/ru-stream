@@ -1,9 +1,13 @@
+import VKStories from "@/Pages/Stream/Create/VKStories.vue";
+import VKPage from "@/Pages/Stream/Create/VKPage.vue";
+
 export const streamType = {
     'vk-page' : {
         name: 'Страница ВКонтакте',
         handler: 'vk-page',
         icon: 'vk-page',
         link: '/streams/vk-page',
+        creatorComponent: VKPage,
         labels: {
             accounts: 'Аккаунтов',
             streams: 'Стримов',
@@ -15,6 +19,7 @@ export const streamType = {
         handler: 'vk-stories',
         icon: 'vk-stories',
         link: '/streams/vk-stories',
+        creatorComponent: VKStories,
         labels: {
             accounts: 'Аккаунтов',
             streams: 'Историй',
@@ -31,22 +36,22 @@ export const streamType = {
             streams: 'Стримов',
         }
     },
-    'youtube' : {
-        name: 'Youtube',
-        handler: 'youtube',
-        icon: 'youtube',
-        link: '/streams/youtube',
-        labels: {
-            accounts: 'Каналов',
-            streams: 'Стримов',
-        }
-    },
 
     'telegram' : {
-        name: 'Telegram',
+        name: 'Группа Telegram',
         handler: 'telegram',
         icon: 'telegram',
         link: '/streams/telegram',
+        labels: {
+            accounts: 'Аккаунтов',
+            streams: 'Стримов',
+        }
+    },
+    'telegram-stories' : {
+        name: 'Истории Telegram',
+        handler: 'telegram-stories',
+        icon: 'telegram',
+        link: '/streams/telegram-stories',
         labels: {
             accounts: 'Аккаунтов',
             streams: 'Стримов',

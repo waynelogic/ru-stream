@@ -9,7 +9,7 @@ const form = useForm({
     amount: null
 })
 const submitPayment = () => {
-    form.post(route('actions', 'makePayment'), {
+    form.post(route('dashboard.payment'), {
         preserveScroll: true,
         onSuccess: () => {
             form.reset();
@@ -19,7 +19,7 @@ const submitPayment = () => {
 </script>
 
 <template>
-    <form @submit.prevent="submitPayment" class="box flex flex-col space-y-4 p-4 h-full">
+    <form @submit.prevent="submitPayment" class="box flex flex-col space-y-4 p-4">
         <h3 class="font-serif font-semibold">Пополнение баланса</h3>
         <TextInput class="mt-auto" v-model="form.amount" type="number" placeholder="Сумма пополнения"/>
         <InputError :message="form.errors.amount" class="mt-2"/>

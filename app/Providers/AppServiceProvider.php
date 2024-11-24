@@ -1,8 +1,6 @@
-<?php
+<?php namespace App\Providers;
 
-namespace App\Providers;
-
-use App\Http\Resources\VkUserResource;
+use App\Http\Resources;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        VkUserResource::withoutWrapping();
+        Resources\VkUserResource::withoutWrapping();
+        Resources\SubscriptionResource::withoutWrapping();
+        Resources\VideoResource::withoutWrapping();
 
         RedirectResponse::macro('flashMessage', function ($type, $message) {
             return $this->with('flashy', ['type' => $type, 'message' => $message]);

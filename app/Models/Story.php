@@ -1,12 +1,15 @@
 <?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class Story extends FileModel
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    protected $appends = ['video_url', 'poster_url'];
 
     protected $casts = [
         'duration' => 'float',
@@ -26,6 +29,11 @@ class Story extends FileModel
         );
     }
 
+    public function streams() : HasMany
+    {
+        return $this->hasMany(Stream::class);
+    }
+
     public function generatePoster(): void
     {
         try {
@@ -34,19 +42,15 @@ class Story extends FileModel
             $media = FFMpeg::fromDisk('public')->open($obVideoFile->getPathRelativeToRoot());
 
             // Устанавливаем длительность и сохраняем её в базе данных
-            $this->duration = $media->getDurationInMiliseconds();
+            $this->duration = $media->getDurationInSeconds();
             $this->save();
 
             // Генерируем постер
-            $frameTimeInSeconds = 7; // Момент кадра в секундах
+            $frameTimeInSeconds = 10; // Момент кадра в секундах
+
             $posterName = 'story_poster'.$this->id.'.jpg';
-            $tempPath = storage_path('app/public/'.$posterName);
-
-            $media->getFrameFromSeconds($frameTimeInSeconds)->export()->save($tempPath);
-
-            // Добавляем изображение в коллекцию 'posters' и удаляем временный файл
-            $this->addMedia($tempPath)->toMediaCollection('posters');
-            unlink($tempPath);
+            $media->getFrameFromSeconds($frameTimeInSeconds)->export()->save($posterName);
+            $this->addMediaFromDisk($posterName, 'public')->toMediaCollection('posters');
         } catch (\Exception $e) {
             Log::error('Не удалось создать постер для видео с ID '.$this->id.': '.$e->getMessage());
         }

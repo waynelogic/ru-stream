@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class PricingPlanResource extends Resource
 {
     protected static ?string $model = PricingPlan::class;
-    protected static ?string $navigationGroup = 'RU:Stream';
+    protected static ?string $navigationGroup = 'Магазин';
     protected static ?string $label = 'Тарифы';
     protected static ?string $pluralLabel = 'Тарифы';
     protected static ?string $recordTitleAttribute = 'name';
@@ -120,6 +120,7 @@ class PricingPlanResource extends Resource
 //                Tables\Grouping\Group::make('type')
 //                    ->label('Тип'),
             ])
+            ->defaultGroup('type')
             ->groups([
                 Tables\Grouping\Group::make('type')
                     ->label('Тип'),

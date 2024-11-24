@@ -33,9 +33,41 @@ export default {
                     '950': '#00031c',
                 },
             },
+            animation: {
+                bulb: 'bulb 2s ease-in-out infinite',
+                wiggle: 'wiggle 1s ease-in-out infinite',
+                'gradient-glow': 'gradient-glow 2s linear infinite',
+            },
+            keyframes: {
+                'gradient-glow': {
+                    '0%, 100%': {
+                        'background-position': '0% 50%',
+                        'background-size': '100% 100%'
+                    },
+                    '50%': {
+                        'background-position': '100% 50%;',
+                        'background-size': '300% 300%'
+                    },
+                },
+                bulb: {
+                    '0%, 100%': { filter: 'drop-shadow(-0.5px -3px 6px #ffe082);' },
+                    '50%': { filter: 'drop-shadow(0.5px -4px 4px #ffcd82)' },
+                },
+                wiggle: {
+                    '0%, 100%': { transform: 'rotate(-3deg)' },
+                    '50%': { transform: 'rotate(3deg)' },
+                }
+            }
         },
         container: {
             center: true,
+            padding: {
+                DEFAULT: '1rem',
+                sm: '2rem',
+                lg: '4rem',
+                xl: '5rem',
+                '2xl': '6rem',
+            },
         },
     },
 

@@ -6,9 +6,36 @@
 @tailwind components;
 @tailwind utilities;
 
-[x-cloak] {
-    display: none;
+@layer base {
+    #nprogress .bar {
+        background: linear-gradient(248.28deg, #9e61ff 9.539999999999999%, rgba(142, 97, 255, 0) 32.8%), radial-gradient(81.70999999999999% 279.87% at -16.57% -92%, #619bff 28.69%, rgba(205, 219, 248, 0) 69.54000000000001%), #6c52ee !important;
+
+        position: fixed;
+        z-index: 1031;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 4px !important;
+    }
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #00031c;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #6e78ff;
+        border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #6d75e8;
+    }
 }
+
 
 @layer components {
     .box {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class VideoController extends Controller
 {
@@ -12,7 +13,11 @@ class VideoController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        return Inertia::render('App/Videos', [
+            'videos' => $user->videos()->get(),
+            'stories' => $user->stories()->get(),
+        ]);
     }
 
     /**
@@ -91,6 +96,9 @@ class VideoController extends Controller
     public function destroy(string $id)
     {
         $obVideo = Video::find($id);
+        if ($obVideo->streams()->exists()) {
+            return back()->flashError('Невозможно удалить видео, так как оно связано с активным стримом.');
+        }
         $obVideo->delete();
 
         return back()->flashSuccess('Видео удалено');
