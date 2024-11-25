@@ -21,7 +21,7 @@ const form = useForm({
 })
 const submit = () => {
     if (form.account_id === 'new') {
-        window.location.href = route('auth.vk.redirect');
+        window.location.href = route('auth.vk.redirect', props.type);
     } else {
         form.post(route('streams.attachAccount', props.type), {
             onSuccess: () => isShowAttach.value = false

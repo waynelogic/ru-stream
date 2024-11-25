@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StreamType;
+use App\Http\Resources\SubscriptionResource;
 use App\Http\Resources\VideoResource;
 use App\Http\Resources\VkUserResource;
 use App\Models\Stream;
@@ -22,6 +23,7 @@ class StreamController extends Controller
     {
         $this->user = auth()->user();
 
+        $subscription = $this->user->subscriptions()->where('type', $type->value)->first();
         ['view' => $view, 'data' => $data] = match ($type) {
             StreamType::VKPage => ['view' => 'Stream/VKPage', 'data' => $this->indexVKPage()],
             StreamType::VKStories => ['view' => 'Stream/VKStories', 'data' => $this->indexVKStories()],
@@ -32,6 +34,7 @@ class StreamController extends Controller
         $data['videoCount'] = $type->isStory() ? $this->user->stories()->count() : $this->user->videos()->count();
         $data['type'] = $type;
         $data['accounts'] = $this->account($type)->withStreams($type)->get();
+        $data['subscription'] = $subscription ? new SubscriptionResource($subscription) : null;
 
         return Inertia::render($view, $data);
     }

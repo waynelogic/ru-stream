@@ -23,7 +23,9 @@ class SubscriptionResource extends JsonResource
             'start_at' => $this->start_at,
             'trial_ends_at' => $this->trial_ends_at,
             'ends_at' => $this->ends_at,
-            'percentage' => $this->percentage
+            'percentage' => $this->percentage,
+            'max_accounts_count' => $this->pricing_plan->max_accounts_count,
+            'max_streams_count' => $this->pricing_plan->max_streams_count
         ];
     }
 }
