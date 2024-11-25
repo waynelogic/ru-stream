@@ -1,8 +1,11 @@
 <?php namespace App\Providers;
 
 use App\Http\Resources;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Jetstream\Jetstream;
 
 class AppServiceProvider extends ServiceProvider
 {

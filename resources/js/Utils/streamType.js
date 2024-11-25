@@ -37,24 +37,24 @@ export const streamType = {
         }
     },
 
-    'telegram' : {
-        name: 'Группа Telegram',
-        handler: 'telegram',
-        icon: 'telegram',
-        link: '/streams/telegram',
-        labels: {
-            accounts: 'Аккаунтов',
-            streams: 'Стримов',
-        }
-    },
-    'telegram-stories' : {
-        name: 'Истории Telegram',
-        handler: 'telegram-stories',
-        icon: 'telegram',
-        link: '/streams/telegram-stories',
-        labels: {
-            accounts: 'Аккаунтов',
-            streams: 'Стримов',
-        }
-    },
+    // 'telegram' : {
+    //     name: 'Группа Telegram',
+    //     handler: 'telegram',
+    //     icon: 'telegram',
+    //     link: '/streams/telegram',
+    //     labels: {
+    //         accounts: 'Аккаунтов',
+    //         streams: 'Стримов',
+    //     }
+    // },
+    // 'telegram-stories' : {
+    //     name: 'Истории Telegram',
+    //     handler: 'telegram-stories',
+    //     icon: 'telegram',
+    //     link: '/streams/telegram-stories',
+    //     labels: {
+    //         accounts: 'Аккаунтов',
+    //         streams: 'Стримов',
+    //     }
+    // },
 }

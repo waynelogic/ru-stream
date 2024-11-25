@@ -14,6 +14,7 @@ class DashboardController extends Controller
         $arVideos = $user->videos()->get()->append(['video_url', 'poster_url']);
         $arStories = $user->stories()->get()->append(['video_url', 'poster_url']);
 
+
         return Inertia::render('Dashboard/Index', [
             'videos' => $arVideos,
             'stories' => $arStories,

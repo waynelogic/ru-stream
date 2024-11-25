@@ -97,10 +97,11 @@ const clearPhotoFileInput = () => {
                     ref="photoInput"
                     type="file"
                     class="hidden"
+                    accept="image/*"
                     @change="updatePhotoPreview"
                 >
 
-                <InputLabel for="photo" value="Photo" />
+                <InputLabel for="photo" value="Фото" />
 
                 <!-- Current Profile Photo -->
                 <div v-show="! photoPreview" class="mt-2">
@@ -182,7 +183,7 @@ const clearPhotoFileInput = () => {
 
         <template #actions>
             <ActionMessage :on="form.recentlySuccessful" class="me-3">
-                Saved.
+                Сохранено.
             </ActionMessage>
 
             <Button size="md" text-size="sm" :disabled="form.processing">

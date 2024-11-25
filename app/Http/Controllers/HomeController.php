@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CaseItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Inertia\Inertia;
 
 class HomeController extends Controller

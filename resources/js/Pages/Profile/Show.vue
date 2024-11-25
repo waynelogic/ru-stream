@@ -14,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-    <AppLayout title="Profile">
+    <AppLayout title="Профиль">
         <template #header>
             <h2 class="font-semibold text-xl leading-tight">
                 Profile

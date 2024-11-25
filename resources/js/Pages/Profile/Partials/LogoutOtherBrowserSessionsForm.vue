@@ -8,6 +8,7 @@ import InputError from '@/Components/Form/InputError.vue';
 import PrimaryButton from '@/Components/Auth/PrimaryButton.vue';
 import SecondaryButton from '@/Components/Auth/SecondaryButton.vue';
 import TextInput from '@/Components/Form/TextInput.vue';
+import Button from "@/Components/Actions/Button.vue";
 
 defineProps({
     sessions: Array,
@@ -45,16 +46,16 @@ const closeModal = () => {
 <template>
     <ActionSection>
         <template #title>
-            Browser Sessions
+            Сеансы браузера
         </template>
 
         <template #description>
-            Manage and log out your active sessions on other browsers and devices.
+            Управляйте активными сеансами и выходите из них в других браузерах и устройствах.
         </template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-gray-600">
-                If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.
+            <div class="max-w-xl text-sm">
+                При необходимости вы можете выйти из всех других сеансов браузера на всех своих устройствах. Некоторые из ваших недавних сессий перечислены ниже; однако этот список не может быть исчерпывающим. Если вы считаете, что ваша учетная запись была скомпрометирована, вам также следует обновить пароль.
             </div>
 
             <!-- Other Browser Sessions -->
@@ -71,16 +72,16 @@ const closeModal = () => {
                     </div>
 
                     <div class="ms-3">
-                        <div class="text-sm text-gray-600">
+                        <div class="text-sm">
                             {{ session.agent.platform ? session.agent.platform : 'Unknown' }} - {{ session.agent.browser ? session.agent.browser : 'Unknown' }}
                         </div>
 
                         <div>
-                            <div class="text-xs text-gray-500">
+                            <div class="text-xs">
                                 {{ session.ip_address }},
 
-                                <span v-if="session.is_current_device" class="text-green-500 font-semibold">This device</span>
-                                <span v-else>Last active {{ session.last_active }}</span>
+                                <span v-if="session.is_current_device" class="text-green-500 font-semibold">Это устройство</span>
+                                <span v-else>Последняя активность {{ session.last_active }}</span>
                             </div>
                         </div>
                     </div>
@@ -88,12 +89,12 @@ const closeModal = () => {
             </div>
 
             <div class="flex items-center mt-5">
-                <PrimaryButton @click="confirmLogout">
-                    Log Out Other Browser Sessions
-                </PrimaryButton>
+                <Button text-size="sm" @click="confirmLogout">
+                    Выйти из других сеансов браузера
+                </Button>
 
                 <ActionMessage :on="form.recentlySuccessful" class="ms-3">
-                    Done.
+                    Готово.
                 </ActionMessage>
             </div>
 

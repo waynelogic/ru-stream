@@ -15,10 +15,13 @@ import {money} from "@/Utils/money.js";
 import Button from "@/Components/Actions/Button.vue";
 import Certificates from "@/Pages/Dashboard/Certificates.vue";
 import LinkButton from "@/Components/Actions/LinkButton.vue";
+import PartnersTable from "@/Pages/Dashboard/PartnersTable.vue";
 
 const props = defineProps({
     videos: Object,
-    stories: Object
+    stories: Object,
+    referred: Object,
+    partner: Object
 })
 
 const user = computed(() => usePage().props.auth.user);
@@ -48,36 +51,6 @@ const statItems = computed(() => {
         },
     ]
 })
-
-const people = [
-    {
-        name: 'Lindsay Walton',
-        title: 'Front-end Developer',
-        department: 'Optimization',
-        email: 'lindsay.walton@example.com',
-        role: 'Member',
-        image:
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        name: 'Lindsay Walton',
-        title: 'Front-end Developer',
-        department: 'Optimization',
-        email: 'lindsay.walton@example.com',
-        role: 'Member',
-        image:
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        name: 'Lindsay Walton',
-        title: 'Front-end Developer',
-        department: 'Optimization',
-        email: 'lindsay.walton@example.com',
-        role: 'Member',
-        image:
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-]
 </script>
 
 <template>
@@ -104,6 +77,12 @@ const people = [
                 </div>
             </section>
             <section>
+                <header class="mb-6">
+                    <h2 class="text-3xl font-bold"><span class="theme-gradient-text">Приглашенные</span> пользователи</h2>
+                </header>
+                <PartnersTable :user="user" :items="referred"/>
+            </section>
+            <section>
                 <header class="flex items-center justify-between">
                     <h2 class="text-3xl font-bold"><span class="theme-gradient-text">Текущие</span> подписки</h2>
                     <LinkButton :href="route('plans.index')">Перейти к тарифам</LinkButton>
@@ -114,29 +93,6 @@ const people = [
                         <PhPlusCircle class="size-10"/>
                         <span class="font-semibold text-lg">Добавить подписку</span>
                     </Link>
-                </div>
-            </section>
-<!--            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">-->
-<!--                &lt;!&ndash; Подписки &ndash;&gt;-->
-<!--                <div>-->
-<!--                    <h2 class="text-3xl font-bold mb-6"><span class="theme-gradient-text">Текущие</span> подписки</h2>-->
-<!--                    <SubscriptionsTable :subscriptions="subscriptions"/>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; Приглашенные пользователи &ndash;&gt;-->
-<!--                <div>-->
-<!--                    <h2 class="text-3xl font-bold mb-6"><span class="theme-gradient-text">Приглашенные</span> пользователи</h2>-->
-<!--                    <PartnersTable :items="referred" :login="user.login"/>-->
-<!--                </div>-->
-<!--            </div>-->
-
-            <section>
-                <h2 class="text-3xl font-bold mb-6"><span class="theme-gradient-text">Приглашенные</span> пользователи</h2>
-                <div class="box overflow-hidden bg-primary-950/50 min-w-full align-middle">
-                    <DefaultTable :rows="people">
-                        <TextColumn column="name" label="Название"/>
-                        <TextColumn column="department" label="Отдел"/>
-                        <TextColumn column="role" label="Роль" badge/>
-                    </DefaultTable>
                 </div>
             </section>
 

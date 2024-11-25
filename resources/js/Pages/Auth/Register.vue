@@ -12,6 +12,12 @@ import FormLabel from "@/Components/Form/FormLabel.vue";
 import LinkButton from "@/Components/Actions/LinkButton.vue";
 import Button from "@/Components/Actions/Button.vue";
 
+const props = defineProps({
+    partner: {
+        type: Object,
+    }
+});
+
 const form = useForm({
     name: '',
     email: '',
@@ -80,6 +86,10 @@ const submit = () => {
                         autocomplete="new-password"
                     />
                 </FormLabel>
+
+                <div class="box text-center py-4 px-6 mt-4" v-if="partner">
+                    Вас пригласил партнер <span class="text-primary-400 font-bold">{{ partner.login }}</span>
+                </div>
 
                 <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="">
                     <InputLabel for="terms">

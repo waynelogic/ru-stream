@@ -1,27 +1,3 @@
-<template>
-    <table class="min-w-full divide-y divide-white/20">
-        <thead class="bg-primary-900">
-            <tr>
-                <th v-for="(column, index) in internalColumns" :key="index"
-                    :class="[ 'py-3.5 px-3 text-left text-sm font-semibold']">
-                    {{ column.label }}
-                </th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-white/20">
-            <tr v-if="rows.length"  v-for="(row, rowIndex) in rows" :key="rowIndex">
-                <td v-for="(column, colIndex) in internalColumns" :key="colIndex"
-                :class="td({ padding: colIndex === 0 ? 'left' : colIndex === internalColumns.length - 1 ? 'right' : 'center' })">
-                    <component :is="column.component" :row="row" v-bind="column.props" />
-                </td>
-            </tr>
-            <tr v-else>
-                <td colspan="100%" class="text-center text-gray-500 py-4">Нет данных</td>
-            </tr>
-        </tbody>
-    </table>
-</template>
-
 <script setup>
 import { computed } from 'vue';
 import { useSlots } from 'vue';
@@ -29,6 +5,10 @@ import {tv} from "tailwind-variants";
 
 // Принимаем props в script setup
 const props = defineProps({
+    emptyMessage: {
+        type: String,
+        default: 'Нет данных',
+    },
     columns: {
         type: Array,
         default: () => [],
@@ -70,3 +50,27 @@ const td = tv({
     }
 })
 </script>
+
+<template>
+    <table class="min-w-full divide-y divide-white/20">
+        <thead class="bg-primary-900">
+            <tr>
+                <th v-for="(column, index) in internalColumns" :key="index"
+                    :class="[ 'py-3.5 px-3 text-left text-sm font-semibold select-none']">
+                    {{ column.label }}
+                </th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-white/20">
+            <tr v-if="rows.length"  v-for="(row, rowIndex) in rows" :key="rowIndex">
+                <td v-for="(column, colIndex) in internalColumns" :key="colIndex"
+                    :class="td({ padding: colIndex === 0 ? 'left' : colIndex === internalColumns.length - 1 ? 'right' : 'center' })">
+                    <component :is="column.component" :row="row" v-bind="column.props" />
+                </td>
+            </tr>
+            <tr v-else>
+                <td colspan="100%" class="text-center text-gray-500 select-none py-4">{{ emptyMessage }}</td>
+            </tr>
+        </tbody>
+    </table>
+</template>

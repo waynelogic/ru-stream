@@ -16,7 +16,10 @@ trait Client
 {
     use Sluggable;
 
-
+//    protected $appends = [
+//        'profile_photo_url',
+//        'referral_link',
+//    ];
 
     public $slugs = [
         'login' => 'email_login',
@@ -29,7 +32,12 @@ trait Client
 //        'login',
 //    ];
 
-    public function getEmailLoginAttribute()
+    public function getReferralLinkAttribute(): string
+    {
+        return url()->route('home') . '?ref=' . $this->login;
+    }
+
+    public function getEmailLoginAttribute(): string
     {
         return trim(strstr($this->email,'@',true));
     }
