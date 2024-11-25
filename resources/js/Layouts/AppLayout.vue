@@ -1,5 +1,5 @@
 <script setup>
-import {Head} from "@inertiajs/vue3";
+import {Head, router} from "@inertiajs/vue3";
 import DropdownLink from "@/Components/Auth/DropdownLink.vue";
 import Dropdown from "@/Components/Actions/Dropdown.vue";
 import {PhCaretDown, PhGear} from "@phosphor-icons/vue";
@@ -14,6 +14,10 @@ const props = defineProps({
     meta: Object
 })
 const showNotifications = ref(false);
+
+const logout = () => {
+    router.post(route('logout'));
+};
 </script>
 
 <template>
@@ -72,7 +76,7 @@ const showNotifications = ref(false);
                                     <span class="sr-only">Open user menu</span>
 <!--                                    <img class="size-8 rounded-full bg-gray-50" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">-->
                                     <span class="flex items-center">
-                                    <span class="ml-4 text-sm font-semibold leading-6" aria-hidden="true">{{ $page.props.auth.user.name }}</span>
+                                    <span class="ml-4 text-sm font-semibold leading-6" aria-hidden="true">{{ $page.props.auth.user.login }}</span>
                                         <PhCaretDown weight="bold" class="ml-2 mr-3 size-3"/>
                                     </span>
                                 </Button>
@@ -81,23 +85,23 @@ const showNotifications = ref(false);
                             <template #content>
                                 <!-- Account Management -->
                                 <div class="block px-4 py-2 text-xs text-gray-400">
-                                    Manage Account
+                                    Управление аккаунтом
                                 </div>
 
                                 <DropdownLink :href="route('profile.show')">
-                                    Profile
+                                    Профиль
                                 </DropdownLink>
 
-                                <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
-                                    API Tokens
-                                </DropdownLink>
+<!--                                <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">-->
+<!--                                    API Tokens-->
+<!--                                </DropdownLink>-->
 
-                                <div class="border-t border-gray-200" />
+                                <div class="border-t border-white/20" />
 
                                 <!-- Authentication -->
                                 <form @submit.prevent="logout">
                                     <DropdownLink as="button">
-                                        Log Out
+                                        Выйти
                                     </DropdownLink>
                                 </form>
                             </template>
