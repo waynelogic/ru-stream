@@ -41,7 +41,7 @@ const submit = () => {
                 {{ status }}
             </div>
 
-            <form @submit.prevent="submit" class="">
+            <form @submit.prevent="submit" class="" autocomplete="on">
                 <h4 class="text-2xl font-serif font-semibold mb-4">Вход</h4>
                 <div>
                     <FormLabel value="E-mail" :message="form.errors.email">

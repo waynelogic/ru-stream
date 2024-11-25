@@ -36,7 +36,7 @@ const submit = () => {
 <template>
     <GuestLayout title="Регистрация">
         <AuthenticationCard>
-            <form @submit.prevent="submit" class="flex flex-col gap-3">
+            <form @submit.prevent="submit" autocomplete="on" class="flex flex-col gap-3">
                 <h4 class="text-2xl font-serif font-semibold mb-4">Регистрация</h4>
                 <FormLabel value="Имя" :message="form.errors.name">
                     <TextInput

@@ -1,6 +1,6 @@
 <script setup>
+import {Head} from "@inertiajs/vue3";
 import {ref} from "vue";
-import {Link, router, usePage } from '@inertiajs/vue3';
 import {PhCaretDown, PhPlayCircle} from "@phosphor-icons/vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import Button from "@/Components/Actions/Button.vue";
@@ -35,8 +35,8 @@ let arFaq = [
         text: '<p>Сервис позволяет пользователям загружать заранее подготовленные видеоролики, выбирать интервал воспроизведения (например, повторять каждый час) и запускать их в прямом эфире на страницы ВКонтакте, Telegram и других платформах.</p>'
     },
     {
-        title : 'Могу ли я заработать на RU:STREAM',
-        icon : 'images/home/faq/cache.png',
+        title: 'Могу ли я заработать на RU:STREAM',
+        icon: 'images/home/faq/cache.png',
         text: `
             <p>Партнерская программа сервиса, позволяет зарабатывать Бонусные рубли (1 БР = 1 РУБ) за привлечение новых пользователей. Вы получите комиссию в размере 10% от всех платежей привлеченных партнеров, которая сразу поступит на ваш баланс.</p>
             <p>Партнерские начисления могут использоваться только для оплаты услуг сервиса без возможности вывода или передачи другому пользователю. Вашу партнерскую ссылку можно найти в личном кабинете.</p>
@@ -78,9 +78,16 @@ let arFaq = [
             `
     },
 ];
+
+// <meta property="og:title"
+//       content="Как быстро и бесплатно сделать инфографику: 4 онлайн-сервиса с доступным функционалом"/>
+
 </script>
 
 <template>
+    <Head>
+        <meta property="og:title" content="Ru:Stream - Платформа для рестрима ваших видео"/>
+    </Head>
     <GuestLayout fixed-header>
         <section class="hero-section relative isolate">
             <!--Задний фон-->
