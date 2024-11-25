@@ -50,10 +50,6 @@ function openStreamCreator(account_id) {
         router.visit(route('streams.create', { type: page.props.type, account_id: account_id}))
     }
 }
-
-onMounted(() => {
-
-})
 </script>
 
 <template>

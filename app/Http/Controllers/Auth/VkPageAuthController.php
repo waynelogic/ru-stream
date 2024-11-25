@@ -84,7 +84,7 @@ class VkPageAuthController extends Controller
         $backType = $request->session()->pull('back_type', StreamType::VKPage);
         if ($backType) {
             $obVkUser->attach($backType);
-            return redirect(route('stream.index', $backType));
+            return redirect(route('streams.index', $backType));
         }
 
         return redirect(route('dashboard'));
