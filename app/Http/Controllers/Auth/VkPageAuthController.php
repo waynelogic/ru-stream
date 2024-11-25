@@ -22,8 +22,11 @@ class VkPageAuthController extends Controller
         $this->vk = new VKApiClient;
     }
 
-    public function redirect(Request $request)
+    public function redirect(Request $request, StreamType $type = null)
     {
+        if ($type) {
+            $request->session()->put('back_type', $type);
+        }
         $request->session()->put('state', $state = Str::random(40));
 
         $request->session()->put('code_verifier', $code_verifier = Str::random(128));
@@ -77,11 +80,14 @@ class VkPageAuthController extends Controller
 
         $this->fillUserData($obVkUser, $data->access_token);
 
-        $obVkUser->
 
-        $back = session()->pull('auth.back', route('streams.index', StreamType::VKPage));
+        $backType = $request->session()->pull('back_type', StreamType::VKPage);
+        if ($backType) {
+            $obVkUser->attach($backType);
+            return redirect(route('stream.index', $backType));
+        }
 
-        return redirect($back);
+        return redirect(route('dashboard'));
     }
 
     public function fillUserData(VkUser $obVkUser, $access_token)

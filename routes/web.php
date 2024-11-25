@@ -55,7 +55,7 @@ Route::middleware([
         Route::any('/telegram/{method}', [Controllers\Auth\TelegramAuthController::class, 'index'])->name('telegram');
         /* VK */
         Route::group(['prefix' => 'vk', 'as' => 'vk.',], function () {
-            Route::get('redirect', [Controllers\Auth\VkPageAuthController::class, 'redirect'])->name('redirect');
+            Route::get('redirect{type?}', [Controllers\Auth\VkPageAuthController::class, 'redirect'])->name('redirect');
             Route::get('callback', [Controllers\Auth\VkPageAuthController::class, 'callback'])->name('callback');
         });
     });

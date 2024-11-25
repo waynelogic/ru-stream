@@ -11,6 +11,8 @@ import GuestLayout from "@/Layouts/GuestLayout.vue";
 import LinkButton from "@/Components/Actions/LinkButton.vue";
 import Button from "@/Components/Actions/Button.vue";
 import FormLabel from "@/Components/Form/FormLabel.vue";
+import {ref} from "vue";
+import {PhEye, PhEyeClosed} from "@phosphor-icons/vue";
 
 defineProps({
     canResetPassword: Boolean,
@@ -31,6 +33,8 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+const showPassword = ref(false);
 </script>
 
 <template>
@@ -60,15 +64,20 @@ const submit = () => {
 
                 <div class="mt-4">
                     <FormLabel value="Пароль" :message="form.errors.password">
-                        <TextInput
-                            id="password"
-                            v-model="form.password"
-                            placeholder="********"
-                            type="password"
-                            class="mt-1 block w-full"
-                            required
-                            autocomplete="current-password"
-                        />
+                        <div class="relative isolate mt-1">
+                            <TextInput
+                                id="password"
+                                v-model="form.password"
+                                placeholder="********"
+                                :type="showPassword ? 'text' : 'password'"
+                                class="block w-full pr-12"
+                                required
+                                autocomplete="current-password"
+                            />
+                            <button type="button" class="text-primary-950 absolute right-2 top-1/2 -translate-y-1/2 p-2 cursor-pointer">
+                                <component :is="showPassword ? PhEye : PhEyeClosed" @click="showPassword = !showPassword" class="size-5"/>
+                            </button>
+                        </div>
                     </FormLabel>
                 </div>
 

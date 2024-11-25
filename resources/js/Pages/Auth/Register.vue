@@ -11,6 +11,8 @@ import GuestLayout from "@/Layouts/GuestLayout.vue";
 import FormLabel from "@/Components/Form/FormLabel.vue";
 import LinkButton from "@/Components/Actions/LinkButton.vue";
 import Button from "@/Components/Actions/Button.vue";
+import {ref} from "vue";
+import {PhEye, PhEyeClosed} from "@phosphor-icons/vue";
 
 const props = defineProps({
     partner: {
@@ -31,6 +33,8 @@ const submit = () => {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
+
+const showPassword = ref(false);
 </script>
 
 <template>
@@ -44,7 +48,7 @@ const submit = () => {
                         v-model="form.name"
                         placeholder="Имя"
                         type="text"
-                        class="mt-1 block w-full"
+                        class="block w-full"
                         required
                         autofocus
                         autocomplete="name"
@@ -57,34 +61,44 @@ const submit = () => {
                         v-model="form.email"
                         placeholder="E-mail"
                         type="email"
-                        class="mt-1 block w-full"
+                        class="block w-full"
                         required
                         autocomplete="username"
                     />
                 </FormLabel>
 
                 <FormLabel value="Пароль" :message="form.errors.password">
-                    <TextInput
-                        id="password"
-                        v-model="form.password"
-                        placeholder="******"
-                        type="password"
-                        class="mt-1 block w-full"
-                        required
-                        autocomplete="new-password"
-                    />
+                    <div class="relative isolate">
+                        <TextInput
+                            id="password"
+                            v-model="form.password"
+                            placeholder="******"
+                            :type="showPassword ? 'text' : 'password'"
+                            class="block w-full pr-12"
+                            required
+                            autocomplete="new-password"
+                        />
+                        <button type="button" class="text-primary-950 absolute right-2 top-1/2 -translate-y-1/2 p-2 cursor-pointer">
+                            <component :is="showPassword ? PhEye : PhEyeClosed" @click="showPassword = !showPassword" class="size-5"/>
+                        </button>
+                    </div>
                 </FormLabel>
 
                 <FormLabel value="Подтверждение пароля" :message="form.errors.password_confirmation">
-                    <TextInput
-                        id="password_confirmation"
-                        v-model="form.password_confirmation"
-                        type="password"
-                        placeholder="******"
-                        class="mt-1 block w-full"
-                        required
-                        autocomplete="new-password"
-                    />
+                    <div class="relative isolate">
+                        <TextInput
+                            id="password_confirmation"
+                            v-model="form.password_confirmation"
+                            type="password"
+                            placeholder="******"
+                            class="block w-full pr-12"
+                            required
+                            autocomplete="new-password"
+                        />
+                        <button type="button" class="text-primary-950 absolute right-2 top-1/2 -translate-y-1/2 p-2 cursor-pointer">
+                            <component :is="showPassword ? PhEye : PhEyeClosed" @click="showPassword = !showPassword" class="size-5"/>
+                        </button>
+                    </div>
                 </FormLabel>
 
                 <div class="box text-center py-4 px-6 mt-4" v-if="partner">
