@@ -9,7 +9,7 @@ const vVibrate = {
     mounted(el, {value}) {
         el.addEventListener('click', () => {
             if ('vibrate' in navigator) {
-                navigator.vibrate(value || [200, 100, 200])
+                navigator.vibrate(value || [20])
             }
         })
     }
