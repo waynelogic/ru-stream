@@ -25,9 +25,9 @@ class StreamController extends Controller
 
         $subscription = $this->user->subscriptions()->where('type', $type->value)->first();
         ['view' => $view, 'data' => $data] = match ($type) {
-            StreamType::VKPage => ['view' => 'Stream/VKPage', 'data' => $this->indexVKPage()],
-            StreamType::VKStories => ['view' => 'Stream/VKStories', 'data' => $this->indexVKStories()],
-            StreamType::VKGroup => throw new \Exception('To be implemented'),
+            StreamType::VKPage => ['view' => 'Stream/VKPage', 'data' => []],
+            StreamType::VKStories => ['view' => 'Stream/VKStories', 'data' => []],
+            StreamType::VKGroup => ['view' => 'Stream/VKGroup', 'data' => $this->indexVKGroup()],
             StreamType::YouTube => throw new \Exception('To be implemented'),
             StreamType::Telegram => throw new \Exception('To be implemented'),
         };
@@ -43,7 +43,7 @@ class StreamController extends Controller
     {
         $accounts = match ($type) {
             StreamType::VKPage, StreamType::VKStories => auth()->user()->vk_user(),
-            StreamType::VKGroup => throw new \Exception('To be implemented'),
+            StreamType::VKGroup => auth()->user()->vk_groups(),
             StreamType::YouTube => throw new \Exception('To be implemented'),
             StreamType::Telegram => throw new \Exception('To be implemented'),
         };
@@ -51,6 +51,13 @@ class StreamController extends Controller
             return $accounts->where('id', $account_id)->first();
         }
         return $accounts;
+    }
+
+    private function indexVKGroup()
+    {
+        return [
+            'vkAccounts' => Inertia::lazy(fn () => $this->user->vk_user()->get()->append('api_groups')),
+        ];
     }
 
     private function indexVKPage()
@@ -202,6 +209,8 @@ class StreamController extends Controller
         $result->save();
         return back()->flashSuccess('Трансляция остановлена');
     }
+
+
 
 
 }

@@ -2,6 +2,7 @@
 
 use App\Models\Certificate;
 use App\Models\PromoCode;
+use App\Models\Social\VkGroup;
 use App\Models\Social\VkUser;
 use App\Models\Story;
 use App\Models\Subscription;
@@ -80,5 +81,10 @@ trait Client
     public function vk_user(): HasMany
     {
         return $this->hasMany(VkUser::class);
+    }
+
+    public function vk_groups() : HasMany
+    {
+        return $this->hasMany(VkGroup::class);
     }
 }

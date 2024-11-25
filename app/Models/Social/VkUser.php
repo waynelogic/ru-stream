@@ -2,6 +2,7 @@
 
 use App\Enums\StreamType;
 use App\Models\Stream;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use VK\Client\VKApiClient;
@@ -195,5 +196,28 @@ class VkUser extends AbstractAuthModel
         $this->save();
 
         return $this->access_token;
+    }
+
+
+
+    public function apiGroups() : Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $response = $this->getClient()->groups()->get($this->getAccessToken(), [
+                    'user_id' => $this->vk_id,
+                    'filter' => 'admin',
+                    'extended' => 1,
+                ]);
+
+                return $response['items'];
+            },
+        );
+    }
+    public function apiGroupById($id)
+    {
+        return $this->getClient()->groups()->getById($this->getAccessToken(), [
+            'group_id' => $id,
+        ])[0];
     }
 }
