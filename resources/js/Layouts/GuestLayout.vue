@@ -3,7 +3,7 @@ import Flash from "@/Components/Actions/Flash.vue";
 import {Head} from "@inertiajs/vue3";
 import Header from "@/Layouts/GuestLayout/Header.vue";
 import Footer from "@/Layouts/GuestLayout/Footer.vue";
-import Breadcrumbs from "@/Pages/Guest/Breadcrumbs.vue";
+import Breadcrumbs from "@/Layouts/AppLayout/Breadcrumbs.vue";
 
 const props = defineProps({
     title: String,

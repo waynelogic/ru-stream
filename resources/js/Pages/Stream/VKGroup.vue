@@ -15,20 +15,16 @@ const props = defineProps({
     vkAccounts: Object,
     type: String
 })
-const attachedAccounts = computed(() => props.accounts.filter(account => account.is_in_page));
-const notAttachedAccounts = computed(() => props.accounts.filter(account => !account.is_in_page));
+const attachedAccounts = computed(() => props.accounts.filter(account => account.in_dashboard));
+const notAttachedAccounts = computed(() => props.accounts.filter(account => !account.in_dashboard));
 
 const form = useForm({
     account_id: '',
 })
 const submit = () => {
-    if (form.account_id === 'new') {
-        window.location.href = route('auth.vk.redirect', props.type);
-    } else {
-        form.post(route('streams.attachAccount', props.type), {
-            onSuccess: () => isShowAttach.value = false
-        });
-    }
+    form.post(route('streams.attachAccount', props.type), {
+        onSuccess: () => isShowAttach.value = false
+    });
 }
 const isShowAttach = ref(false)
 const openAttach = () => isShowAttach.value = true
@@ -46,11 +42,25 @@ const toggleNewAccount = () => {
         onSuccess: () => showNewAccount.value = true
     })
 }
+function addGroup() {
+    if (addForm.account_id === 'new') {
+        window.location.href = route('auth.vk.redirect', props.type);
+    } else if (addForm.account_id && addForm.group_id) {
+        addForm.post(route('auth.vk.addGroup'), {
+            onSuccess: () => {
+                addForm.reset();
+                showNewAccount.value = false;
+                isShowAttach.value = false
+            },
+        });
+    } else {
+        alert('Выберите аккаунт и группу')
+    }
+}
 </script>
 
 <template>
     <AppLayout :title="title">
-        {{ vkAccounts }}
         <AccountsSlider :title="title" :accounts="attachedAccounts"/>
 
         <Modal :show="isShowAttach" title="Прикрепить аккаунт" closeable max-width="2xl" @close="isShowAttach = false">
@@ -74,13 +84,13 @@ const toggleNewAccount = () => {
                 </form>
             </template>
             <template v-else>
-                <div class="flex flex-col gap-6">
-                    <CustomSelect v-if="vkAccounts" v-model="addForm.account_id" :options="vkAccounts ? vkAccounts.map(account => ({value: account.id, label: account.view_name, icon: account.view_avatar})) : []"/>
+                <div class="flex flex-col gap-6 p-4">
+                    <CustomSelect placeholder="Выберите аккаунт" v-if="vkAccounts && vkAccounts.length" v-model="addForm.account_id" :options="vkAccounts ? vkAccounts.map(account => ({value: account.id, label: account.view_name, icon: account.view_avatar})) : []"/>
 
                     <template v-for="account in vkAccounts">
                         <transition enter-active-class="ease-out duration-300" enter-from-class="scale-0 opacity-0" enter-to-class="scale-100 opacity-100" leave-active-class="ease-in duration-200" leave-from-class="scale-100 opacity-100" leave-to-class="scale-0 opacity-0">
                             <div v-if="addForm.account_id === account.id" class="flex flex-col gap-4">
-                                <label v-if="addForm.account_id === account.id" class="flex items-center gap-4 box rounded-md p-2 has-[:checked]:bg-primary-900 duration-300 cursor-pointer" v-for="group in account.api_groups">
+                                <label v-if="addForm.account_id === account.id" class="flex items-center gap-4 box rounded-md p-2 has-[:checked]:bg-primary-800 duration-300 cursor-pointer" v-for="group in account.api_groups">
                                     <input v-model="addForm.group_id" class="hidden" type="radio" name="account" :value="group.id">
                                     <img :src="group.photo_200" class="size-8 rounded-full" alt="profile">
                                     <span class="font-serif font-semibold">{{ group.name }}</span>
@@ -95,10 +105,10 @@ const toggleNewAccount = () => {
                         </span>
                         <span class="font-serif font-semibold">Новый аккаунт ВКонтакте </span>
                     </label>
-                    <button :disabled="!addForm.account_id || !addForm.group_id && addForm.account_id !== 'new'" @click="addGroup" class="w-full btn btn-primary text-base p-2">
+                    <Button :disabled="!addForm.account_id || !addForm.group_id && addForm.account_id !== 'new'" @click="addGroup" class="w-full">
                         Добавить
                         <PhCheck class="size-6 ml-2"/>
-                    </button>
+                    </Button>
                 </div>
             </template>
         </Modal>

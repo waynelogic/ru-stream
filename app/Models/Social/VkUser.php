@@ -209,7 +209,6 @@ class VkUser extends AbstractAuthModel
                     'filter' => 'admin',
                     'extended' => 1,
                 ]);
-
                 return $response['items'];
             },
         );

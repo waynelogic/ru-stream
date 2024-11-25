@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\StreamType;
 use App\Http\Controllers\Controller;
+use App\Models\Social\VkGroup;
 use App\Models\Social\VkUser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -123,5 +124,28 @@ class VkPageAuthController extends Controller
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public function addGroup(Request $request)
+    {
+        $vkUser = VkUser::find($request->account_id);
+        if (!$vkUser) {
+            return back()->banner('Аккаунт не найден');
+        }
+        $groupId = $request->group_id;
+        $data = $vkUser->apiGroupById($groupId);
+
+        $obGroup = VkGroup::query()->updateOrCreate([
+            'vk_id' => $groupId,
+        ], [
+            'name' => $data['name'],
+            'avatar_url' => $data['photo_200'],
+            'user_id' => $vkUser->user_id,
+            'vk_user_id' => $vkUser->id,
+        ]);
+
+        $obGroup->attach(StreamType::VKGroup);
+
+        return back()->banner('Группа успешно добавлена');
     }
 }

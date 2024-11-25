@@ -26,16 +26,16 @@ export const streamType = {
         }
     },
 
-    // 'vk-group' : {
-    //     name: 'Группа ВКонтакте',
-    //     handler: 'vk-group',
-    //     icon: 'vk-group',
-    //     link: '/streams/vk-group',
-    //     labels: {
-    //         accounts: 'Групп',
-    //         streams: 'Стримов',
-    //     }
-    // },
+    'vk-group' : {
+        name: 'Группа ВКонтакте',
+        handler: 'vk-group',
+        icon: 'vk-group',
+        link: '/streams/vk-group',
+        labels: {
+            accounts: 'Групп',
+            streams: 'Стримов',
+        }
+    },
 
     // 'telegram' : {
     //     name: 'Группа Telegram',

@@ -60,22 +60,6 @@ class StreamController extends Controller
         ];
     }
 
-    private function indexVKPage()
-    {
-//        dd($this->user->vk_user()->withStreams(StreamType::VKPage)->get());
-        return [
-//            'accounts' => $this->user->vk_user()->withStreams(StreamType::VKPage)->get(),
-//            'videoCount' => $this->user->videos()->count(),
-        ];
-    }
-
-    public function indexVKStories()
-    {
-        return [
-//            'accounts' => $this->user->vk_user()->with('streams.story')->get(),
-//            'videoCount' => $this->user->stories()->count(),
-        ];
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -142,7 +126,7 @@ class StreamController extends Controller
 
     public function attachAccount(Request $request, StreamType $type)
     {
-        $obAccount = $this->findAccount($type);
+        $obAccount = $this->account($type, $request->account_id);
 
         $success = $obAccount->attach($type);
         if ($success) {
@@ -153,7 +137,7 @@ class StreamController extends Controller
 
     public function detachAccount(Request $request, StreamType $type)
     {
-        $obAccount = $this->findAccount($type);
+        $obAccount = $this->account($type, $request->account_id);
 
         $success = $obAccount->detach($type);
         if ($success) {
@@ -162,20 +146,6 @@ class StreamController extends Controller
         return back()->flashError('Произошла ошибка');
     }
 
-    public function findAccount($type)
-    {
-        $accounts = match ($type) {
-            StreamType::VKPage, StreamType::VKStories => auth()->user()->vk_user(),
-            StreamType::VKGroup => throw new \Exception('To be implemented'),
-            StreamType::YouTube => throw new \Exception('To be implemented'),
-            StreamType::Telegram => throw new \Exception('To be implemented'),
-        };
-        $obAccount = $accounts->where('id', \request()->account_id)->first();
-        if (!$obAccount) {
-            throw new \Exception('Аккаунт не найден');
-        }
-        return $obAccount;
-    }
 
     protected function findAndValidateStream(int $stream_id, bool $shouldBeActive)
     {
@@ -209,8 +179,4 @@ class StreamController extends Controller
         $result->save();
         return back()->flashSuccess('Трансляция остановлена');
     }
-
-
-
-
 }

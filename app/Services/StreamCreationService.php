@@ -30,7 +30,7 @@ class StreamCreationService
         match ($type) {
             StreamType::VKPage => $obService->createVKPage($request),
             StreamType::VKStories => $obService->createVKStories($request),
-            StreamType::VKGroup => throw new \Exception('To be implemented'),
+            StreamType::VKGroup => $obService->createVKGroup($request),
             StreamType::YouTube => throw new \Exception('To be implemented'),
             StreamType::Telegram => throw new \Exception('To be implemented'),
         };
@@ -58,6 +58,15 @@ class StreamCreationService
         $obAccount = $this->user->vk_user()->where('id', $this->request->account_id)->first();
         $this->data['story_id'] = $this->request->video_id;
         $this->data['options'] = $this->request->options ?? [];
+
+        $this->obAccount = $obAccount;
+    }
+
+    private function createVKGroup(Request $request)
+    {
+        $obAccount = $this->user->vk_groups()->where('id', $this->request->account_id)->first();
+
+        $this->data['video_id'] = $this->request->video_id;
 
         $this->obAccount = $obAccount;
     }

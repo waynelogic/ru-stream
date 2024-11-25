@@ -8,6 +8,7 @@ import Flash from "@/Components/Actions/Flash.vue";
 import Button from "@/Components/Actions/Button.vue";
 import AsidePanel from "@/Components/Actions/AsidePanel.vue";
 import {ref} from "vue";
+import Footer from "@/Layouts/AppLayout/Footer.vue";
 
 const props = defineProps({
     title: String,
@@ -115,6 +116,7 @@ const logout = () => {
             </main>
         </div>
     </div>
+    <Footer/>
 </template>
 
 <style scoped>
