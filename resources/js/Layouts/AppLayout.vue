@@ -9,6 +9,7 @@ import Button from "@/Components/Actions/Button.vue";
 import AsidePanel from "@/Components/Actions/AsidePanel.vue";
 import {ref} from "vue";
 import Footer from "@/Layouts/AppLayout/Footer.vue";
+import AppIcon from "@/Pages/App/AppIcon.vue";
 
 const props = defineProps({
     title: String,
@@ -40,12 +41,8 @@ const logout = () => {
 
         <div class="lg:pl-60">
             <div class="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-x-4 border-b border-white/20 bg-primary-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-                <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
-                    <span class="sr-only">Open sidebar</span>
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                    </svg>
-                </button>
+
+                <AppIcon class="lg:hidden"/>
 
                 <!-- Separator -->
                 <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true"></div>
@@ -70,12 +67,10 @@ const logout = () => {
                         <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-white/50" aria-hidden="true"></div>
 
                         <!-- Profile dropdown -->
-
                         <Dropdown align="right" width="48">
                             <template #trigger>
                                 <Button color="primary" size="sm" radius="full" type="button" class="-m-1.5 flex items-center " id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                     <span class="sr-only">Open user menu</span>
-<!--                                    <img class="size-8 rounded-full bg-gray-50" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">-->
                                     <span class="flex items-center">
                                     <span class="ml-4 text-sm font-semibold leading-6" aria-hidden="true">{{ $page.props.auth.user.login }}</span>
                                         <PhCaretDown weight="bold" class="ml-2 mr-3 size-3"/>
@@ -88,17 +83,10 @@ const logout = () => {
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     Управление аккаунтом
                                 </div>
-
                                 <DropdownLink :href="route('profile.show')">
                                     Профиль
                                 </DropdownLink>
-
-<!--                                <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">-->
-<!--                                    API Tokens-->
-<!--                                </DropdownLink>-->
-
                                 <div class="border-t border-white/20" />
-
                                 <!-- Authentication -->
                                 <form @submit.prevent="logout">
                                     <DropdownLink as="button">

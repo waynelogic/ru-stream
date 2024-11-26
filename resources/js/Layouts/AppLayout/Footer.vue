@@ -5,15 +5,6 @@ import Svg from "@/Components/Common/Svg.vue";
 import {streamType} from "@/Utils/streamType.js";
 import {ref} from "vue";
 
-const vVibrate = {
-    mounted(el, {value}) {
-        el.addEventListener('click', () => {
-            if ('vibrate' in navigator) {
-                navigator.vibrate(value || [20])
-            }
-        })
-    }
-}
 const servicesOpen = ref(false);
 </script>
 

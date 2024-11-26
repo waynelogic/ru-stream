@@ -6,7 +6,7 @@ import {createInertiaApp, router} from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import NProgress from 'nprogress'
-
+import vVibrate from "@/directives/vibrate.js";
 router.on('start', () => NProgress.start())
 router.on('finish', (event) => {
     if (event.detail.visit.completed) {
@@ -23,6 +23,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+            .directive('vibrate', vVibrate)
             .use(ZiggyVue)
             .mount(el);
     },

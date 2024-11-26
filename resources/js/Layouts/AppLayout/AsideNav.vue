@@ -4,6 +4,7 @@ import {PhAirplay, PhGear, PhHouse, PhShoppingCart, PhUser} from "@phosphor-icon
 import {computed} from "vue";
 import Svg from "@/Components/Common/Svg.vue";
 import {streamType} from "@/Utils/streamType.js";
+import AppIcon from "@/Pages/App/AppIcon.vue";
 
 const mainNav = computed(() => {
     return [
@@ -71,14 +72,7 @@ const isItemActive = (item) => {
         <!-- Sidebar component, swap this element with another sidebar if you like -->
         <div class="flex grow flex-col gap-y-5 overflow-y-auto px-5 pb-4">
             <div class="flex h-14 shrink-0 items-center border-b border-white/20 bg-primary-900 p-5 -mx-5">
-                <Link href="/" class="group font-bold text-3xl drop-shadow-[0_2px_5px_rgba(255,255,255,0.1)]">
-                    <span class="theme-gradient text-transparent bg-clip-text animate-gradient-glow">RU:</span>
-                    <span class="theme-gradient bg-clip-text animate-gradient-glow">
-                        <span :style="{transitionDelay: `${i * 0.04}s`}" class="group-hover:text-transparent duration-150" v-for="(letter, i) in ['S', 'T', 'R', 'E', 'A', 'M']" :key="i">
-                            {{ letter }}
-                        </span>
-                    </span>
-                </Link>
+                <AppIcon/>
             </div>
             <nav class="flex flex-1 flex-col">
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">

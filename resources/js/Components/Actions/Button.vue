@@ -61,7 +61,7 @@ const btn = tv({
 </script>
 
 <template>
-    <component :is="href ? Link : 'button'" :href="href" :class="btn({color, size, textSize, radius})">
+    <component v-vibrate :is="href ? Link : 'button'" :href="href" :class="btn({color, size, textSize, radius})">
         <slot />
     </component>
 </template>

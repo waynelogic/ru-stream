@@ -10,11 +10,14 @@ import TextInput from "@/Components/Form/TextInput.vue";
 import TextArea from "@/Components/Form/TextArea.vue";
 import VKVideoPlayer from "@/Components/Common/VKVideoPlayer.vue";
 import CaseItem from "@/Components/CaseItem.vue";
+import Modal from "@/Components/Actions/Modal.vue";
 
 const props = defineProps({
     cases: Object,
     intervals: Object
 });
+
+const showModal = ref(false);
 
 const isBgShowing = ref(false);
 let arSteps = [
@@ -165,6 +168,12 @@ let arFaq = [
                 </div>
             </div>
         </section>
+
+        <Modal title="Намного о нашем сервисе" max-width="2xl" :show="showModal" @close="showModal = !showModal">
+            <template v-if="showModal">
+                <VKVideoPlayer class="w-full" src="https://vk.com/video_ext.php?oid=-215374743&id=456239178&hd=2&js_api=1"/>
+            </template>
+        </Modal>
 
         <section class="relative steps">
             <div class="container py-12">
