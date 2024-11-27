@@ -177,6 +177,9 @@ class StreamController extends Controller
         if (is_string($result)) return back()->flashError($result);
         $result->is_active = false;
         $result->save();
+        if ($result->is_online) {
+            $result->stop();
+        }
         return back()->flashSuccess('Трансляция остановлена');
     }
 }
