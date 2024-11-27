@@ -87,6 +87,11 @@ class VkGroup extends AbstractAuthModel
         return true;
     }
 
+    public function getAccessToken() : string
+    {
+        return $this->vk_user->getAccessToken();
+    }
+
 
     public function vk_user() : BelongsTo
     {
