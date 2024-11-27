@@ -31,10 +31,12 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = auth()->user();
         return [
             ...parent::share($request),
-            'subscriptions' => SubscriptionResource::collection(auth()->user()?->subscriptions()->get() ?? collect()),
+            'subscriptions' => SubscriptionResource::collection($user?->subscriptions()->get() ?? collect()),
             'flashy' => session('flashy'),
+            'notifications' => $user?->notifications()->get(),
             'data' => session('data'),
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),

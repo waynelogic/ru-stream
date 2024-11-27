@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\StreamType;
 use App\Models\PricingPlan;
 use App\Models\User;
+use App\Notifications\Subscription\SubscriptionAdded;
+use App\Notifications\Subscription\SubscriptionChanged;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -55,8 +57,10 @@ class SubscriptionController extends Controller
         $obUser->save();
 
         if ($obCurrent) {
+            $obUser->notify(new SubscriptionChanged($obPricingPlan, $obCurrent->pricing_plan));
             return back()->flashSuccess('Подписка была изменена на план '. $obPricingPlan->name);
         } else {
+            $obUser->notify(new SubscriptionAdded($obPricingPlan));
             return back()->flashSuccess('Подписка на план '. $obPricingPlan->name.' была оформлена');
         }
     }
@@ -103,6 +107,6 @@ class SubscriptionController extends Controller
 
     public function findCurrent(StreamType $type)
     {
-        return auth()->user()?->subscriptions()->where('type', $type->value)->first() ?? null;
+        return auth()->user()?->subscriptions()->where('type', $type->value)->with('pricing_plan')->first() ?? null;
     }
 }

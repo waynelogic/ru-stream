@@ -196,10 +196,10 @@ let arFaq = [
                     </div>
 
                     <div class="box rounded-xl shadow-md self-start">
-                        <form @submit.prevent="submit" class="space-y-4 p-6 duration-300">
+                        <form @submit.prevent="submit" class="space-y-4 p-4 sm:p-6 duration-300">
                             <div>
                                 <InputLabel>Заголовок трансляций: максимум 50-55 символов</InputLabel>
-                                <TextInput type="text" required autofocus maxlength="55" class="mt-1 block w-full" placeholder="Название трансляции" />
+                                <TextInput type="text" required maxlength="55" class="mt-1 block w-full" placeholder="Название трансляции" />
                             </div>
                             <div>
                                 <InputLabel>Описание трансляции: максимум 100-120 символов</InputLabel>

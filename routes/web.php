@@ -49,6 +49,10 @@ Route::middleware([
         Route::delete('/{id}', [Controllers\StreamController::class, 'destroy'])->name('destroy');
     });
 
+    Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {
+        Route::post('read/{id}', [Controllers\NotificationController::class, 'read'])->name('read');
+    });
+
     /** Auth */
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         /* Telegram */

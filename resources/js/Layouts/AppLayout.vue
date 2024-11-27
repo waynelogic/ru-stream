@@ -1,21 +1,24 @@
 <script setup>
-import {Head, router} from "@inertiajs/vue3";
+import {Head, router, usePage} from "@inertiajs/vue3";
 import DropdownLink from "@/Components/Auth/DropdownLink.vue";
 import Dropdown from "@/Components/Actions/Dropdown.vue";
-import {PhCaretDown, PhGear} from "@phosphor-icons/vue";
+import {PhBell, PhCaretDown, PhGear} from "@phosphor-icons/vue";
 import AsideNav from "@/Layouts/AppLayout/AsideNav.vue";
 import Flash from "@/Components/Actions/Flash.vue";
 import Button from "@/Components/Actions/Button.vue";
 import AsidePanel from "@/Components/Actions/AsidePanel.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import Footer from "@/Layouts/AppLayout/Footer.vue";
 import AppIcon from "@/Pages/App/AppIcon.vue";
+import Notifications from "@/Layouts/AppLayout/Notifications.vue";
 
 const props = defineProps({
     title: String,
     meta: Object
 })
 const showNotifications = ref(false);
+const page = usePage();
+const notifications = computed(() => page.props.notifications.filter(notification => ! notification.read_at));
 
 const logout = () => {
     router.post(route('logout'));
@@ -32,15 +35,11 @@ const logout = () => {
     <div class="min-h-screen bg-primary-950 text-white">
         <AsideNav/>
         <AsidePanel align="right" width="sm" :open="showNotifications" @close="showNotifications = false">
-            <div class="flex items-start p-6 border-b border-white/20">
-                <div>
-                    <h3 class="text-base font-semibold font-serif">Уведомления</h3>
-                </div>
-            </div>
+            <Notifications :notifications="notifications" @close="showNotifications = false"/>
         </AsidePanel>
 
         <div class="lg:pl-60">
-            <div class="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-x-4 border-b border-white/20 bg-primary-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+            <div class="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-x-3 lg:gap-x-4 border-b border-white/20 bg-primary-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
 
                 <AppIcon class="lg:hidden"/>
 
@@ -58,9 +57,12 @@ const logout = () => {
                     <div class="flex items-center gap-x-4 lg:gap-x-6 ml-auto">
                         <button @click="showNotifications = ! showNotifications" type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
                             <span class="sr-only">View notifications</span>
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                            </svg>
+                            <div :class="[notifications.length ? 'mr-3' : '', 'relative']">
+                                <PhBell :class="[ notifications.length ? 'text-primary-200' : '', 'size-6']"/>
+                                <div v-if="notifications.length" class="absolute -top-1 left-full px-1 flex items-center justify-center text-xs border border-white/50 rounded">
+                                    {{ notifications.length }}
+                                </div>
+                            </div>
                         </button>
 
                         <!-- Separator -->

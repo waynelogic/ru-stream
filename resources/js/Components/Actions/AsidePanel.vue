@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, PropType} from "vue";
+import {computed, PropType, watch} from "vue";
 
 const props = defineProps({
     open: {
@@ -27,6 +27,14 @@ const widthClass = computed(() => {
 
 const classEnterLeave = computed(() => {
     return props.align === 'right' ? 'translate-x-full' : '-translate-x-full'
+})
+
+watch(() => props.open, () => {
+    if (props.open) {
+        document.body.classList.add('overflow-hidden');
+    } else {
+        document.body.classList.remove('overflow-hidden');
+    }
 })
 </script>
 
