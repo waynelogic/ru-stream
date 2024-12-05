@@ -1,6 +1,7 @@
 {
     "name": "Ru:Stream",
     "short_name": "LPT",
+    "start_url": "/dashboard",
     "background_color": "#261059",
     "description": "Платформа для рестрима ваших видео",
     "display": "fullscreen",
