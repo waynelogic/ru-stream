@@ -10,6 +10,11 @@ abstract class AbstractAuthModel extends Model {
 
     protected $appends = ['view_name', 'view_avatar'];
 
+    public function beforeDeleteStream(): bool
+    {
+        return true;
+    }
+
     abstract public function getViewNameAttribute() : string;
     abstract public function getViewAvatarAttribute() : string;
     public function attach(StreamType $type) : bool

@@ -274,7 +274,7 @@ let arFaq = [
                     <span class="theme-gradient-text">Вопросы</span> и ответы
                 </h2>
                 <div class="flex flex-col space-y-6">
-                    <details class="group box" v-for="(item , index) in arFaq" :key="index">
+                    <details class="group box overflow-hidden" v-for="(item , index) in arFaq" :key="index">
                         <summary class="flex items-center p-4 duration-300 hover:bg-white/20 cursor-pointer">
                             <img width="50px" height="50px" class="size-12 object-contain" :src="item.icon" alt="">
                             <span class="font-semibold font-serif ml-4">{{ item.title }}</span>

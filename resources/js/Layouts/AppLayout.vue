@@ -11,6 +11,7 @@ import {computed, ref} from "vue";
 import Footer from "@/Layouts/AppLayout/Footer.vue";
 import AppIcon from "@/Pages/App/AppIcon.vue";
 import Notifications from "@/Layouts/AppLayout/Notifications.vue";
+import Snow from "@/Components/Common/Snow.vue";
 
 const props = defineProps({
     title: String,
@@ -31,6 +32,7 @@ const logout = () => {
         <meta v-for="(value, key) in meta" :key="key" :name="key" :content="value">
     </Head>
     <Flash/>
+<!--    <Snow/>-->
 
     <div class="min-h-screen bg-primary-950 text-white">
         <AsideNav/>

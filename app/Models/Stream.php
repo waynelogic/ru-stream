@@ -14,6 +14,7 @@ class Stream extends Model
 {
     protected $appends = ['is_story'];
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
     protected $casts = [
         'is_active' => 'boolean',
         'type' => StreamType::class,
@@ -31,25 +32,9 @@ class Stream extends Model
         return $this->belongsTo(User::class);
     }
 
-    protected static function booted()
+    protected static function booted(): void
     {
         parent::booted();
-
-        self::saving(function ($model) {
-//            if ($model->is_story) {
-//                if (!$model->is_active) {
-//                    $model->streamable->removeStory($model);
-//                }
-//            }
-        });
-
-        self::deleting(function ($model) {
-            if ($model->is_story) {
-                $model->streamable->removeStory($model);
-            } else {
-                $model->streamable->stopStream($model);
-            }
-        });
     }
 
     public function getIsStoryAttribute()
@@ -83,13 +68,14 @@ class Stream extends Model
         $this->next_at = $this->expires_at->copy()->addMinutes($this->repeat_interval->value);
         $this->play_count++;
         $this->save();
+
         Log::info('Stream - ' . $this->id . ' started');
+
         return true;
     }
 
     public function stop()
     {
-        $this->stopRtmp();
         $result = $this->is_story ? true : $this->streamable->stopStream($this);
 
         if ($result) {
@@ -97,6 +83,7 @@ class Stream extends Model
             $this->save();
             Log::info('Stream - ' . $this->id . ' stopped');
         }
+
         return $result;
     }
 

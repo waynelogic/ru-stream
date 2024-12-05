@@ -4,6 +4,7 @@ import Button from "@/Components/Actions/Button.vue";
 import Prose from "@/Components/Common/Prose.vue";
 import {money} from "@/Utils/money.js";
 import {router} from "@inertiajs/vue3";
+import {ref, watch} from "vue";
 const props = defineProps({
     plan: Object,
     currentTypePlan: Object,
@@ -12,12 +13,16 @@ const props = defineProps({
 })
 
 const submit = () => {
-    router.post(route('subscriptions.store'), {
-        plan: props.plan.id,
-        frequency: props.frequency.value
-    }, {
-        preserveScroll: true
-    })
+    let question = props.currentTypePlan ? 'Вы действительно хотите переоформить подписку?' : 'Вы действительно хотите подписаться?';
+
+    if (confirm(question)) {
+        router.post(route('subscriptions.store'), {
+            plan: props.plan.id,
+            frequency: props.frequency.value
+        }, {
+            preserveScroll: true
+        })
+    }
 }
 const toggleAutorenew = () => {
     router.patch(route('subscriptions.update', props.currentTypePlan.id), {
@@ -26,6 +31,25 @@ const toggleAutorenew = () => {
         preserveScroll: true
     })
 }
+
+const price = ref(props.plan.price[props.frequency.value])
+watch(() => props.frequency, () => {
+    let oldPrice = Math.round(price.value);
+    let newPrice = Math.round(props.plan.price[props.frequency.value]);
+    const step = 50; // Количество кадров для анимации
+    const duration = 500; // Длительность анимации в мс
+    const increment = (newPrice - oldPrice) / step;
+
+    let frame = 0;
+    const interval = setInterval(() => {
+        price.value = Math.round(oldPrice + increment * frame);
+        frame++;
+        if (frame > step) {
+            clearInterval(interval);
+            price.value = newPrice; // Убедитесь, что значение точно обновилось
+        }
+    }, duration / step);
+})
 </script>
 
 <template>
@@ -62,7 +86,7 @@ const toggleAutorenew = () => {
 
 
         <p class="flex items-baseline gap-x-1 font-serif mt-auto">
-            <span class="text-3xl font-bold tracking-tight text-white">{{ money(plan.price[frequency.value]) }}</span>
+            <span class="text-3xl font-bold tracking-tight text-white">{{ money(price) }}</span>
             <span class="text-sm font-semibold leading-6 text-gray-300">{{ frequency.priceSuffix }}</span>
         </p>
         <Button v-if="!currentTypePlan || currentTypePlan.pp_id !== plan.id" @click="submit" color="primary" class="mt-6 w-full">

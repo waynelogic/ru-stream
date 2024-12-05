@@ -67,10 +67,11 @@ class StreamController extends Controller
     public function create(Request $request, StreamType $type, int $account_id)
     {
         $obAccount = $this->account($type, $account_id);
+        $user = auth()->user();
         return Inertia::render('Stream/Create', [
             'account' => $obAccount,
             'type' => $type,
-            'videos' => fn() => $type->isStory() ? auth()->user()->stories()->get() : auth()->user()->videos()->get(),
+            'videos' => fn() => $type->isStory() ? $user->stories()->get() : $user->videos()->get(),
         ]);
     }
 

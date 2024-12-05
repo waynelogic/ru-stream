@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use App\Enums\StreamType;
+use App\Enums\SubscriptionFrequency;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -12,8 +13,9 @@ class Subscription extends Model
         'auto_renew' => 'boolean',
         'start_at' => 'datetime',
         'ends_at' => 'datetime',
+        'frequency' => SubscriptionFrequency::class
     ];
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -21,7 +23,7 @@ class Subscription extends Model
             $model->type = $model->pricing_plan->type;
             $model->auto_renew = true;
             $model->start_at = now();
-            $model->ends_at = now()->addMonth();
+            $model->ends_at = $model->frequency->getEndDate($model->start_at);
         });
     }
 

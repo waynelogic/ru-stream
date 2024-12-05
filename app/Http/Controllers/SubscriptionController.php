@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StreamType;
+use App\Enums\SubscriptionFrequency;
 use App\Models\PricingPlan;
 use App\Models\User;
 use App\Notifications\Subscription\SubscriptionAdded;
@@ -37,9 +38,13 @@ class SubscriptionController extends Controller
         $obPricingPlan = PricingPlan::query()->where('id', (int) $request->plan)->first();
         if (!$obPricingPlan)  return back()->flashError('План не найден');
 
+        // Находим частоту и колонку с ценой
+        $sFrequency = SubscriptionFrequency::from($request->frequency);
+        $sPriceColumn = $sFrequency->getPriceColumn();
+        $intPrice = $obPricingPlan->{$sPriceColumn};
+
         // Если у пользователя недостаточно средств, то возвращаем ошибку.
         $obUser = auth()->user();
-        $intPrice = $obPricingPlan->monthly_price;
         if ($obUser->balance < $intPrice) return back()->flashError('Недостаточно средств');
 
         // Если у пользователя уже есть подписка, то удаляем ее.
@@ -51,7 +56,9 @@ class SubscriptionController extends Controller
         // Создаем подписку
         $obUser->subscriptions()->create([
             'pricing_plan_id' => $obPricingPlan->id,
+            'frequency' => $sFrequency->value
         ]);
+
         // Уменьшаем баланс
         $obUser->balance -= $intPrice;
         $obUser->save();

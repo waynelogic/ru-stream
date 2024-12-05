@@ -15,10 +15,11 @@
         <link rel="manifest" href="/favicon/site.webmanifest">
         <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
         <link rel="shortcut icon" href="/favicon/favicon.ico">
+        <link rel="manifest" href="{{ asset('/manifest.json') }}">
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="msapplication-config" content="/favicon/browserconfig.xml">
         <meta name="theme-color" content="#ffffff">
-{{--        <!-- Fonts -->--}}
+
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
@@ -26,5 +27,14 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
+
+        <script src="{{ asset('/sw.js') }}"></script>
+        <script>
+            if (!navigator.serviceWorker.controller) {
+                navigator.serviceWorker.register("/sw.js").then(function (reg) {
+                    console.log("Service worker has been registered for scope: " + reg.scope);
+                });
+            }
+        </script>
     </body>
 </html>

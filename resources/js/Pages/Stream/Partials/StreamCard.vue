@@ -32,6 +32,7 @@ const isOnline = computed(() => {
 
 const attributes = computed(() => {
     const { is_active, start_at, next_at, play_count, stats, repeat_interval } = props.stream;
+    const today = new Date();
     const startAt = start_at && new Date(start_at);
     const nextAt = next_at && new Date(next_at);
 
@@ -58,7 +59,7 @@ const attributes = computed(() => {
         baseAttributes.push(
             {
                 title: 'Следующий запуск',
-                content: nextAt.toLocaleString(),
+                content: today.toDateString() === nextAt.toDateString() ? next_at.toLocaleTimeString() : nextAt.toLocaleString(),
                 icon: PhSkipForward
             },
             {
@@ -128,11 +129,11 @@ const video = computed(() => {
 
         <dl class="border-white/20 px-4 pt-4 space-y-4">
             <div class="flex justify-between" v-for="item in attributes">
-                <dt class="flex font-medium space-x-3">
-                    <component :is="item.icon" class="size-6"/>
-                    <span>{{ item.title }}</span>
+                <dt class="flex items-center font-medium space-x-3">
+                    <component :is="item.icon" class="size-5 md:size-6"/>
+                    <span class="text-sm md:text-base">{{ item.title }}</span>
                 </dt>
-                <dd class="font-bold">
+                <dd class="text-sm md:text-base font-bold">
                     {{ item.content }}
                 </dd>
             </div>

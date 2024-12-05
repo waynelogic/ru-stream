@@ -16,6 +16,8 @@ class NotificationBase extends Notification
 
     public bool $mail = true;
 
+    public bool $reverb = false;
+
     /**
      * Create a new notification instance.
      */
@@ -34,6 +36,7 @@ class NotificationBase extends Notification
         $arVia = [];
         if ($this->bd) $arVia[] = 'database';
         if ($this->mail) $arVia[] = 'mail';
+        if ($this->reverb) $arVia[] = 'reverb';
         return $arVia;
     }
 }

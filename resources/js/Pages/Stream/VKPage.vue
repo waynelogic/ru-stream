@@ -7,7 +7,7 @@ import AccountsSlider from "@/Pages/Stream/Partials/AccountsSlider.vue";
 import Modal from "@/Components/Actions/Modal.vue";
 import Button from "@/Components/Actions/Button.vue";
 
-const title = 'Страница VK';
+const title = 'Страница ВКонтакте';
 
 const props = defineProps({
     accounts: Object,

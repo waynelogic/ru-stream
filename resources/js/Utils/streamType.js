@@ -1,5 +1,6 @@
 import VKStories from "@/Pages/Stream/Create/VKStories.vue";
 import VKPage from "@/Pages/Stream/Create/VKPage.vue";
+import VKGroup from "@/Pages/Stream/Create/VKGroup.vue";
 
 export const streamType = {
     'vk-page' : {
@@ -31,6 +32,7 @@ export const streamType = {
         handler: 'vk-group',
         icon: 'vk-group',
         link: '/streams/vk-group',
+        creatorComponent: VKGroup,
         labels: {
             accounts: 'Групп',
             streams: 'Стримов',

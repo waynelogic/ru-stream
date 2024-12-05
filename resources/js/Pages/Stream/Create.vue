@@ -96,8 +96,8 @@ const submit = () => {
                 <div class="box overflow-hidden rounded-xl">
                     <VideoPlayer :src="selectedVideo.video_url" :poster="selectedVideo.poster_url" :key="selectedVideo.id"/>
                     <div class="px-6 py-3 flex items-center font-medium text-white w-full border-b border-white/20">
-                        <img :src="account.avatar_url" class="size-8 mr-5 rounded-full" alt="profile">
-                        <span>Вы используете аккаунт - <b>{{ account.first_name }} {{ account.last_name }}</b></span>
+                        <img :src="account.view_avatar" class="size-8 mr-5 rounded-full" alt="profile">
+                        <span>Вы используете аккаунт - <b>{{ account.view_name }}</b></span>
                     </div>
                     <div class="px-6 py-4 flex space-x-4 w-full">
                         <img class="animate-bulb" width="25" height="25" src="/images/common/bulb.svg" alt="Tip">

@@ -8,7 +8,7 @@ import Modal from "@/Components/Actions/Modal.vue";
 import Button from "@/Components/Actions/Button.vue";
 import CustomSelect from "@/Components/Form/CustomSelect.vue";
 
-const title = 'Страница VK';
+const title = 'Группы ВКонтакте';
 
 const props = defineProps({
     accounts: Object,

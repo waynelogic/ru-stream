@@ -18,6 +18,8 @@ class SubscriptionBase extends NotificationBase
     public string $title;
     public string $message;
 
+    public NotifyCategory $category = NotifyCategory::SUBSCRIPTION;
+
 
     /**
      * Create a new notification instance.
@@ -34,7 +36,7 @@ class SubscriptionBase extends NotificationBase
         return [
             'title' => $this->title,
             'message' => $this->message,
-            'category' => NotifyCategory::SUBSCRIPTION
+            'category' => $this->category
         ];
     }
 

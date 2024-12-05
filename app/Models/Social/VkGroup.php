@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Log;
 use VK\Client\VKApiClient;
+use VK\Exceptions\Api\VKApiAccessVideoException;
+use VK\Exceptions\Api\VKApiWallAddPostException;
+use VK\Exceptions\Api\VKApiWallAdsPublishedException;
 use VK\Exceptions\VKApiException;
 use VK\Exceptions\VKClientException;
 
@@ -18,6 +21,13 @@ class VkGroup extends AbstractAuthModel
         return new VKApiClient();
     }
 
+    /**
+     * @throws VKApiAccessVideoException
+     * @throws VKApiWallAdsPublishedException
+     * @throws VKApiException
+     * @throws VKClientException
+     * @throws VKApiWallAddPostException
+     */
     public function startStream(Stream $stream): bool
     {
         if (isset($stream->payload->video_id)) {

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timestamp('ends_at')->nullable();
             $table->string('type')->nullable();
             $table->boolean('auto_renew')->default(true);
+            $table->string('frequency');
             $table->softDeletes();
             $table->timestamps();
         });

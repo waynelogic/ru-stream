@@ -12,8 +12,19 @@ class TestController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
-        $user->notify(new Registered());
+        $command = "ls -la";
+
+        $process = proc_open($command, [
+            0 => ["pipe", "r"],
+            1 => ["pipe", "w"],
+            2 => ["pipe", "w"],
+        ], $pipes);
+
+        $pid = proc_get_status($process);
+        dd($pid);
+
+//        $user = auth()->user();
+//        $user->notify(new Registered());
 //        $arPricingPlans = \App\Models\PricingPlan::all();
 //        foreach ($arPricingPlans as $pricingPlan) {
 //            $pricingPlan->yearly_price = $pricingPlan->monthly_price * 12;
