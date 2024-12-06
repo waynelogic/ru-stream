@@ -1,7 +1,17 @@
 <script setup>
+import {watch} from "vue";
+
 const props = defineProps({
     value: String,
     message: String
+})
+
+watch(() => props.message, () => {
+    if (props.message) {
+        if ('vibrate' in navigator) {
+            navigator.vibrate([ 50, 0, 50 ]);
+        }
+    }
 })
 </script>
 
