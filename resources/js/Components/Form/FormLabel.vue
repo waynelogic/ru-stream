@@ -16,10 +16,10 @@ watch(() => props.message, () => {
 </script>
 
 <template>
-    <label :class="[value ? 'flex flex-col' : 'block font-medium']">
+    <label class="flex flex-col">
         <span v-if="value" class="block font-medium mb-1">{{ value }}</span>
         <slot />
-        <span v-if="message" class="text-base text-red-400 drop-shadow mt-1">
+        <span v-if="message" class="text-base text-red-400 drop-shadow mt-2">
             {{ message }}
         </span>
     </label>
