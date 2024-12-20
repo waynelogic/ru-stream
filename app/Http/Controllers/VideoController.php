@@ -33,16 +33,18 @@ class VideoController extends Controller
      */
     public function store(Request $request)
     {
-        $attributes = [
-            'file' => 'Видео файл',
-            'title' => 'Название',
-            'description' => 'Описание',
-        ];
-
-        $request->validate([
-            'file' => ['required', 'file'],
-            'title' => ['required', 'max:50'],
-        ], [], $attributes);
+        $request->validate(
+            rules: [
+                'file' => ['required', 'file'],
+                'title' => ['required', 'max:50'],
+                'description' => ['max:120'],
+            ],
+            attributes: [
+                'file' => 'Видео файл',
+                'title' => 'Название',
+                'description' => 'Описание',
+            ]
+        );
 
         $obVideo = new Video;
 
@@ -77,15 +79,22 @@ class VideoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'title' => ['required', 'max:50'],
-            'description' => ['max:120'],
-        ]);
+        $request->validate(
+            rules: [
+                'title' => ['required', 'max:50'],
+                'description' => ['max:120'],
+            ],
+            attributes: [
+                'title' => 'Название',
+                'description' => 'Описание',
+            ]
+        );
 
         $obVideo = Video::find($id);
-        $obVideo->title = (string) $request->title;
-        $obVideo->description = (string) $request->description;
-        $obVideo->save();
+        $obVideo->update([
+            'title' => (string) $request->title,
+            'description' => (string) $request->description,
+        ]);
 
         return back()->flashSuccess('Видео обновлено');
     }

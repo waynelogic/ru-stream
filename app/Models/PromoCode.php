@@ -24,7 +24,7 @@ class PromoCode extends Model
     }
 
 
-    public function checkAvailability(): void
+    public function updateAvailability(): void
     {
         if ($this->users()->count() >= $this->max_usage) {
             $this->locked = true;

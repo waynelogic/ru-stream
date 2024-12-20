@@ -27,19 +27,33 @@ class Stream extends Model
         'stats' => 'object'
     ];
 
+    protected static function booted(): void
+    {
+        parent::booted();
+
+        static::deleting(function (Stream $stream) {
+            $stream->remove();
+        });
+    }
+
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    protected static function booted(): void
-    {
-        parent::booted();
-    }
-
-    public function getIsStoryAttribute()
+    public function getIsStoryAttribute() : bool
     {
         return $this->type->isStory();
+    }
+
+    public function getPublicDescriptionAttribute(): string
+    {
+        $text = '';
+        if ($this->description) {
+            $text = $this->description . "\n";
+        }
+        $text .= 'Трансляция создана с помощью сервиса RU:STREAM: ' . $this->user->referral_link;
+        return $text;
     }
 
     public function play(): bool
@@ -47,9 +61,7 @@ class Stream extends Model
         if (!$this->is_active) return false;
 
         $obStreamable = $this->streamable;
-
-        // Определяем метод действия и выполняем его
-        $result = $this->is_story ? $obStreamable->publishStory($this) : $obStreamable->startStream($this);
+        $result = $obStreamable->play($this);
 
         if (!$result) return false;
 
@@ -76,7 +88,8 @@ class Stream extends Model
 
     public function stop()
     {
-        $result = $this->is_story ? true : $this->streamable->stopStream($this);
+        $obStreamable = $this->streamable;
+        $result = $obStreamable->stop($this);
 
         if ($result) {
             $this->is_online = false;
@@ -85,6 +98,11 @@ class Stream extends Model
         }
 
         return $result;
+    }
+
+    public function remove()
+    {
+        return $this->streamable->remove($this);
     }
 
 

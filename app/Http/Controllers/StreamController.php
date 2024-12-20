@@ -8,6 +8,7 @@ use App\Http\Resources\VideoResource;
 use App\Http\Resources\VkUserResource;
 use App\Models\Stream;
 use App\Models\User;
+use App\Services\AccountManager;
 use App\Services\StreamCreationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -28,29 +29,14 @@ class StreamController extends Controller
             StreamType::VKPage => ['view' => 'Stream/VKPage', 'data' => []],
             StreamType::VKStories => ['view' => 'Stream/VKStories', 'data' => []],
             StreamType::VKGroup => ['view' => 'Stream/VKGroup', 'data' => $this->indexVKGroup()],
-            StreamType::YouTube => throw new \Exception('To be implemented'),
             StreamType::Telegram => throw new \Exception('To be implemented'),
         };
         $data['videoCount'] = $type->isStory() ? $this->user->stories()->count() : $this->user->videos()->count();
         $data['type'] = $type;
-        $data['accounts'] = $this->account($type)->withStreams($type)->get();
+        $data['accounts'] = AccountManager::accounts($type, $this->user)->withStreams($type)->get();
         $data['subscription'] = $subscription ? new SubscriptionResource($subscription) : null;
 
         return Inertia::render($view, $data);
-    }
-
-    public function account(StreamType $type, int $account_id = null)
-    {
-        $accounts = match ($type) {
-            StreamType::VKPage, StreamType::VKStories => auth()->user()->vk_user(),
-            StreamType::VKGroup => auth()->user()->vk_groups(),
-            StreamType::YouTube => throw new \Exception('To be implemented'),
-            StreamType::Telegram => throw new \Exception('To be implemented'),
-        };
-        if ($account_id) {
-            return $accounts->where('id', $account_id)->first();
-        }
-        return $accounts;
     }
 
     private function indexVKGroup()
@@ -66,8 +52,8 @@ class StreamController extends Controller
      */
     public function create(Request $request, StreamType $type, int $account_id)
     {
-        $obAccount = $this->account($type, $account_id);
         $user = auth()->user();
+        $obAccount = AccountManager::account($type, $account_id, $user);
         return Inertia::render('Stream/Create', [
             'account' => $obAccount,
             'type' => $type,
@@ -81,12 +67,12 @@ class StreamController extends Controller
     public function store(Request $request, StreamType $type)
     {
         $obStream = StreamCreationService::create($request, $type);
-        if (!$obStream instanceof Stream) {
-            return back()->flashError('Произошла ошибка');
-        }
+        if (!$obStream instanceof Stream)  return back()->flashError('Произошла ошибка');
+
         if (!$request->start_immediately) {
             return redirect()->route('streams.index', $type)->flashSuccess('Трансляция создана');
         }
+
         $obStream->play();
         return redirect()->route('streams.index', $type)->flashSuccess('Трансляция запущена');
     }
@@ -120,14 +106,18 @@ class StreamController extends Controller
      */
     public function destroy(int $id)
     {
+        $user = auth()->user();
         $obStream = Stream::find($id);
+        if ($obStream->user_id !== $user->id) {
+            return back()->flashError('Трансляция принадлежит другому пользователю');
+        }
         $obStream->delete();
         return back()->flashSuccess('Трансляция удалена');
     }
 
     public function attachAccount(Request $request, StreamType $type)
     {
-        $obAccount = $this->account($type, $request->account_id);
+        $obAccount = AccountManager::account($type, $request->account_id);
 
         $success = $obAccount->attach($type);
         if ($success) {
@@ -138,7 +128,7 @@ class StreamController extends Controller
 
     public function detachAccount(Request $request, StreamType $type)
     {
-        $obAccount = $this->account($type, $request->account_id);
+        $obAccount = AccountManager::account($type, $request->account_id);
 
         $success = $obAccount->detach($type);
         if ($success) {

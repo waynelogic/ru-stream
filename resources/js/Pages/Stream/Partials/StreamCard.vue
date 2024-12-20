@@ -59,7 +59,7 @@ const attributes = computed(() => {
         baseAttributes.push(
             {
                 title: 'Следующий запуск',
-                content: today.toDateString() === nextAt.toDateString() ? next_at.toLocaleTimeString() : nextAt.toLocaleString(),
+                content: nextAt.toLocaleTimeString(),
                 icon: PhSkipForward
             },
             {
@@ -114,7 +114,7 @@ const video = computed(() => {
 </script>
 
 <template>
-    <div :class="[isLocked ? 'opacity-50 pointer-events-none scale-95': '' ,'box overflow-hidden border-2 duration-150']">
+    <div :id="'stream-' + stream.id" :class="[isLocked && 'opacity-50 pointer-events-none scale-95', 'box overflow-hidden border-2 duration-150']">
         <VideoPlayer :src="video.video_url" :poster="video.poster_url"/>
         <div class="flex items-center justify-between border-b border-white/20 px-4 py-2">
             <div>

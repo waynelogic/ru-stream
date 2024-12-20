@@ -20,9 +20,11 @@ class BlogController extends Controller
         $obPost = Post::query()->where('slug', $slug)->first();
 
         $arNavPosts = Post::query()->get();
+
         if (!$obPost) {
             abort(404);
         }
+
         return Inertia::render('Blog/Post', [
             'post' => $obPost,
             'navPosts' => $arNavPosts

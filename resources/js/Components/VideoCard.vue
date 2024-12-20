@@ -7,6 +7,7 @@ import InputError from "@/Components/Form/InputError.vue";
 import Button from "@/Components/Actions/Button.vue";
 import TextArea from "@/Components/Form/TextArea.vue";
 import {basename} from "@/Utils/basename.js";
+import VideoPlayer from "@/Components/Common/VideoPlayer.vue";
 
 const props = defineProps({
     video: Object,
@@ -23,20 +24,26 @@ const form = useForm({
 })
 
 const isEditing = ref(props.isNew);
+const isLocked = ref(false);
 
 const submit = () => {
     if (props.isNew) {
         form.post(route('videos.store'), {
             preserveScroll: true,
+            onBefore: () => isLocked.value = true,
             onSuccess: () => {
-                console.log(1)
+                isLocked.value = false;
                 form.reset();
             }
         });
     } else {
         form.put(route('videos.update', props.video.id), {
             preserveScroll: true,
-            onSuccess: () => isEditing.value = false
+            onBefore: () => isLocked.value = true,
+            onSuccess: () => {
+                isEditing.value = false;
+                isLocked.value = false
+            }
         });
     }
 }
@@ -51,11 +58,9 @@ watch(form, () => form.file && (form.title = basename(form.file.name).slice(0, 5
 </script>
 
 <template>
-    <div class="flex flex-col gap-2 box self-start  overflow-hidden" :id="isNew ? 'new-video-card' : 'video-' + video.id">
+    <div :class="isLocked ? 'opacity-50 pointer-events-none' : ''" class="flex flex-col gap-2 box self-start overflow-hidden duration-150" :id="isNew ? 'new-video-card' : 'video-' + video.id">
         <form class="relative" @submit.prevent="submit" enctype="multipart/form-data">
-            <video v-if="!isNew" class="aspect-video w-full" width="100%" height="auto" :poster="video.poster_url" controls>
-                <source :src="video.video_url" type="video/mp4">
-            </video>
+            <VideoPlayer v-if="!isNew" :src="video.video_url" :poster="video.poster_url" :key="video.id"/>
             <template v-if="!isEditing">
                 <div class="flex flex-col px-4 pt-4 w-full">
                     <h3 class="text-base font-semibold font-serif text-indigo-400">{{ video.title }}</h3>

@@ -23,19 +23,26 @@ const form = useForm({
 })
 
 const isEditing = ref(props.isNew);
+const isLocked = ref(false);
 
 const submit = () => {
     if (props.isNew) {
         form.post(route('stories.store'), {
             preserveScroll: true,
+            onBefore: () => isLocked.value = true,
             onSuccess: () => {
+                isLocked.value = false;
                 form.reset();
             }
         });
     } else {
         form.put(route('stories.update', props.story.id), {
             preserveScroll: true,
-            onSuccess: () => isEditing.value = false
+            onBefore: () => isLocked.value = true,
+            onSuccess: () => {
+                isEditing.value = false;
+                isLocked.value = false;
+            }
         });
     }
 }
@@ -50,9 +57,10 @@ watch(form, () => form.file && (form.title = basename(form.file.name).slice(0, 5
 </script>
 
 <template>
-    <div class="flex flex-col gap-2 box self-start overflow-hidden" :id="isNew ? 'new-video-card' : 'video-' + story.id">
+    <div :class="isLocked ? 'opacity-50 pointer-events-none' : ''" class="flex flex-col gap-2 box self-start overflow-hidden duration-150" :id="isNew ? 'new-video-card' : 'video-' + story.id">
         <form class="relative" @submit.prevent="submit" enctype="multipart/form-data">
             <VideoPlayer v-if="!isNew" :src="story.video_url" :poster="story.poster_url" :key="story.id"/>
+
             <template v-if="!isEditing">
                 <div class="flex flex-col px-4 pt-4 w-full">
                     <h3 class="text-base font-semibold font-serif text-indigo-400">{{ story.title }}</h3>
@@ -83,10 +91,10 @@ watch(form, () => form.file && (form.title = basename(form.file.name).slice(0, 5
                         <PhCheck class="size-5 ml-2"/>
                     </Button>
                     <Button type="button" v-if="!isNew"
-                            :class="isEditing ? 'shrink-0' : 'w-full'"
-                            :size="isEditing ? 'square' : 'md'"
-                            :color="isEditing ? 'warning' : 'primary'"
-                            @click="isEditing = !isEditing"
+                        :class="isEditing ? 'shrink-0' : 'w-full'"
+                        :size="isEditing ? 'square' : 'md'"
+                        :color="isEditing ? 'warning' : 'primary'"
+                        @click="isEditing = !isEditing"
                     >
                         <span v-if="!isEditing" class="mr-2">Изменить</span>
                         <component :is="!isEditing ? PhPencil : PhXCircle" class="size-5"/>
@@ -96,7 +104,6 @@ watch(form, () => form.file && (form.title = basename(form.file.name).slice(0, 5
                     </Button>
                 </div>
             </div>
-
         </form>
     </div>
 </template>

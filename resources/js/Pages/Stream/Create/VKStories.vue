@@ -54,7 +54,7 @@ const actions = [
         <InputLabel>Ссылка</InputLabel>
         <TextInput v-model="options.link_url" type="text" class="mt-1 block w-full" placeholder="https://vk.com/..." />
     </div>
-    <div >
+    <div v-if="options.link_url">
         <InputLabel>Текст ссылки</InputLabel>
         <SelectDefault v-model="options.link_text" class="w-full mt-1" :options="actions" label="Выберите действие"/>
     </div>

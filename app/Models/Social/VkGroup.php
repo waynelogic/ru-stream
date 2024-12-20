@@ -21,19 +21,36 @@ class VkGroup extends AbstractAuthModel
         return new VKApiClient();
     }
 
-    /**
-     * @throws VKApiAccessVideoException
-     * @throws VKApiWallAdsPublishedException
-     * @throws VKApiException
-     * @throws VKClientException
-     * @throws VKApiWallAddPostException
-     */
-    public function startStream(Stream $stream): bool
+    public function play(Stream $stream) : bool
     {
         if (isset($stream->payload->video_id)) {
             $this->removeVideo($stream);
         }
+        return $this->startStream($stream);
+    }
 
+    public function stop(Stream $stream) : bool
+    {
+        return $this->stopStream($stream);
+    }
+
+    public function remove() : bool
+    {
+        if (isset($stream->payload->video_id)) {
+            return $this->removeVideo($stream);
+        }
+        return true;
+    }
+
+//    /**
+//     * @throws VKApiAccessVideoException
+//     * @throws VKApiWallAdsPublishedException
+//     * @throws VKApiException
+//     * @throws VKClientException
+//     * @throws VKApiWallAddPostException
+//     */
+    public function startStream(Stream $stream): bool
+    {
         $response = $this->getClient()->video()->startStreaming($this->getAccessToken(), [
             'name' => $stream->title,
             'description' => $stream->public_description,
@@ -51,11 +68,11 @@ class VkGroup extends AbstractAuthModel
         }
         return false;
     }
-
-    /**
-     * @throws VKApiException
-     * @throws VKClientException
-     */
+//
+//    /**
+//     * @throws VKApiException
+//     * @throws VKClientException
+//     */
     public function removeVideo(Stream $stream)
     {
         $this->getClient()->video()->delete($this->getAccessToken(), [
@@ -65,10 +82,6 @@ class VkGroup extends AbstractAuthModel
         $stream->payload = null;
     }
 
-    /**
-     * @throws VKApiException
-     * @throws VKClientException
-     */
     public function stopStream(Stream $stream): bool
     {
         $stop = $this->getClient()->video()->stopStreaming($this->getAccessToken(), [
@@ -91,18 +104,14 @@ class VkGroup extends AbstractAuthModel
         $stream->addStat('reposts', (int) $vkVideo['reposts']['count']);
         $stream->addStat('likes', (int) $vkVideo['likes']['count']);
         $stream->addStat('views', (int) $vkVideo['views']);
-        $stream->payload = null;
         $stream->save();
 
         return true;
     }
-
     public function getAccessToken() : string
     {
         return $this->vk_user->getAccessToken();
     }
-
-
     public function vk_user() : BelongsTo
     {
         return $this->belongsTo(VkUser::class, 'vk_user_id');

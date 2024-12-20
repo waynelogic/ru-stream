@@ -52,7 +52,7 @@ class VideoResource extends Resource
 
             SpatieMediaLibraryFileUpload::make('poster')
                 ->label('Постер')
-                ->collection('poster'),
+                ->collection('posters'),
 
         ]);
     }

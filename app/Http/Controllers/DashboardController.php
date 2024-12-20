@@ -11,8 +11,8 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $arVideos = $user->videos()->get()->append(['video_url', 'poster_url']);
-        $arStories = $user->stories()->get()->append(['video_url', 'poster_url']);
+        $arVideos = $user->videos()->get();
+        $arStories = $user->stories()->get();
 
 
         return Inertia::render('Dashboard/Index', [
@@ -75,7 +75,7 @@ class DashboardController extends Controller
     {
         $user->promo_codes()->attach($promoCode->id);
         $user->balance += $promoCode->price;
-        $promoCode->checkAvailability();
+        $promoCode->updateAvailability();
         $user->save();
     }
 }

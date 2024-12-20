@@ -48,14 +48,14 @@ class Video extends FileModel
 
             // Устанавливаем длительность и сохраняем её в базе данных
             $this->duration = $media->getDurationInSeconds();
-            $this->save();
 
             // Генерируем постер
             $frameTimeInSeconds = 10; // Момент кадра в секундах
 
-            $posterName = 'video_poster'.$this->id.'.jpg';
+            $posterName = 'video_poster_' . $this->id . '.jpg';
             $media->getFrameFromSeconds($frameTimeInSeconds)->export()->save($posterName);
             $this->addMediaFromDisk($posterName, 'public')->toMediaCollection('posters');
+            $this->save();
         } catch (\Exception $e) {
             Log::error('Не удалось создать постер для видео с ID '.$this->id.': '.$e->getMessage());
         }

@@ -12,16 +12,20 @@ class TestController extends Controller
 {
     public function index()
     {
-        $command = "ls -la";
+        $stream = Stream::find(20);
+        $stream->stop();
+//        dd($obVideo->generatePoster());
 
-        $process = proc_open($command, [
-            0 => ["pipe", "r"],
-            1 => ["pipe", "w"],
-            2 => ["pipe", "w"],
-        ], $pipes);
-
-        $pid = proc_get_status($process);
-        dd($pid);
+//        $command = "ls -la";
+//
+//        $process = proc_open($command, [
+//            0 => ["pipe", "r"],
+//            1 => ["pipe", "w"],
+//            2 => ["pipe", "w"],
+//        ], $pipes);
+//
+//        $pid = proc_get_status($process);
+//        dd($pid);
 
 //        $user = auth()->user();
 //        $user->notify(new Registered());
