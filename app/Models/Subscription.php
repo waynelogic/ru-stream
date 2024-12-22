@@ -2,6 +2,7 @@
 
 use App\Enums\StreamType;
 use App\Enums\SubscriptionFrequency;
+use App\Notifications\Subscription\SubscriptionUpdated;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -42,5 +43,21 @@ class Subscription extends Model
         return $this->start_at && $this->ends_at
             ? round(Carbon::now()->diffInDays($this->ends_at) * 100 / $this->start_at->diffInDays($this->ends_at))
             : 0;
+    }
+
+    public function renew(): bool
+    {
+        $priceColumn = $this->frequency->getPriceColumn();
+        $price = $this->pricing_plan->$priceColumn;
+        $user = $this->user;
+
+        if ($user->balance < $price) return false;
+
+        $user->balance -= $price;
+        $user->save();
+
+        $this->start_at = now();
+        $this->ends_at = $this->frequency->getEndDate($this->start_at);
+        return $this->save();
     }
 }

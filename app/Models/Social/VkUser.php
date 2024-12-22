@@ -203,18 +203,14 @@ class VkUser extends AbstractAuthModel
 
         request()->session()->put('state', $state = Str::random(40));
 
-        $client = new Client(['http_errors' => false]);
-        $response = $client->post('https://id.vk.com/oauth2/auth', [
-            'form_params' => [
-                'grant_type' => 'refresh_token',
-                'refresh_token' => $this->refresh_token,
-                'client_id' => env('VK_APP_ID'),
-                'device_id' => $this->device_id,
-                'state' => $state,
-            ]
+        $response = $this->post('https://id.vk.com/oauth2/auth', [
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $this->refresh_token,
+            'client_id' => env('VK_APP_ID'),
+            'device_id' => $this->device_id,
+            'state' => $state,
         ]);
 
-        $response = json_decode($response->getBody());
         $this->access_token = $response->access_token;
         $this->refresh_token = $response->refresh_token;
         $this->expires_at = now()->addSeconds($response->expires_in);
@@ -223,7 +219,23 @@ class VkUser extends AbstractAuthModel
         return $this->access_token;
     }
 
+    public function post(string $url, array $params = [])
+    {
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'POST',
+                'header' => 'Content-Type: application/x-www-form-urlencoded',
+                'content' => http_build_query($params),
+            ],
+        ]);
+        try {
+            $result = file_get_contents($url, false, $context);
 
+            return json_decode($result);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
 
     public function apiGroups() : Attribute
     {
@@ -244,8 +256,6 @@ class VkUser extends AbstractAuthModel
             'group_id' => $id,
         ])[0];
     }
-
-
 
     public function scopeWithStreams($builder, StreamType $type)
     {

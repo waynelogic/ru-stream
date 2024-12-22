@@ -8,12 +8,14 @@ use App\Models\Video;
 use App\Notifications\Registered;
 use App\Services\StreamManagementService;
 use App\Notifications\SubscriptionChanged;
+use App\Services\SubscriptionManager;
+
 class TestController extends Controller
 {
     public function index()
     {
-        $stream = Stream::find(20);
-        $stream->stop();
+        $manager = app(SubscriptionManager::class);
+        $manager->renewAllEnding();
 //        dd($obVideo->generatePoster());
 
 //        $command = "ls -la";
