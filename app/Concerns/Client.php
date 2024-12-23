@@ -47,6 +47,10 @@ trait Client
     {
         return $this->hasMany(User::class, 'partner_id');
     }
+    public function partner() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'partner_id');
+    }
 
     public function promo_codes() : BelongsToMany
     {
@@ -60,11 +64,6 @@ trait Client
             ->withPivot('is_used', 'options');
     }
 
-
-    public function partner() : BelongsTo
-    {
-        return $this->belongsTo(User::class, 'partner_id');
-    }
     public function subscriptions() : HasMany
     {
         return $this->hasMany(Subscription::class);

@@ -201,7 +201,7 @@ class VkUser extends AbstractAuthModel
     {
         if ($this->access_token && $this->expires_at > now()) return $this->access_token;
 
-        request()->session()->put('state', $state = Str::random(40));
+        session()->put('state', $state = Str::random(40));
 
         $response = $this->post('https://id.vk.com/oauth2/auth', [
             'grant_type' => 'refresh_token',
