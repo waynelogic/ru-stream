@@ -1,34 +1,57 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {ref} from "vue";
-import {router, useForm} from "@inertiajs/vue3";
+import {computed, ref} from "vue";
+import {router, useForm, usePage} from "@inertiajs/vue3";
 import TextInput from "@/Components/Form/TextInput.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
 import InputError from "@/Components/Form/InputError.vue";
 import Button from "@/Components/Actions/Button.vue";
+import FormLabel from "@/Components/Form/FormLabel.vue";
+
+const page = usePage();
+const data = computed(() => page.props.data);
 
 const step = ref(1);
 
 const sendPhoneForm = useForm({
     phone: '+79895123444',
 });
-function sendPhoneNumber() {
+const sendPhoneNumber = () => {
     sendPhoneForm.post(route('auth.telegram', 'sendPhoneNumber'),{
         onSuccess: () => {
             step.value = 2;
         }
     });
 }
+
 const codeForm = useForm({
     code: '',
 })
 function completePhoneLogin() {
     codeForm.post(route('auth.telegram', 'completePhoneLogin'),{
         onSuccess: () => {
-            step.value = 3;
+            if (data.value.status === '2FA required') {
+                step.value = 3;
+            } else if (data.value.status === 'Signup required') {
+                step.value = 4;
+            } else {
+                alert('Logged in');
+            }
         }
     });
 }
+
+const passwordForm = useForm({
+    password: '',
+})
+const complete2faLogin = () => {
+    passwordForm.post(route('auth.telegram', 'complete2faLogin'),{
+        onSuccess: () => {
+            alert('Logged in');
+        }
+    });
+}
+
 
 const phoneCode = ref('');
 const password = ref('');
@@ -46,10 +69,7 @@ const lastName = ref('');
 //         alert('Logged in');
 //     }
 // }
-async function complete2faLogin() {
-    await axios.post('/api/telegram/complete-2fa', { password: this.password });
-    alert('Logged in');
-}
+
 async function completeSignup() {
     await axios.post('/api/telegram/signup', { first_name: firstName, last_name: lastName });
     alert('Signed up and logged in');
@@ -58,6 +78,7 @@ async function completeSignup() {
 
 <template>
     <AppLayout title="Telegram группа">
+        {{ data }}
         <div class="box p-10">
             <form class="flex flex-col" v-if="step === 1" @submit.prevent="sendPhoneNumber">
                 <InputLabel>Телефон</InputLabel>
@@ -73,9 +94,12 @@ async function completeSignup() {
                 <Button color="primary" type="submit">Отправить код</Button>
             </form>
 
-            <form v-if="step === 3" @submit.prevent="complete2faLogin">
-                <input v-model="password" placeholder="Enter your 2FA password">
-                <button type="submit">Complete 2FA Login</button>
+            <form class="flex flex-col" v-if="step === 3" @submit.prevent="complete2faLogin">
+                <InputLabel>Ппароль</InputLabel>
+                <FormLabel value="Введите облачный пароль" :message="passwordForm.errors.password">
+                    <TextInput v-model="passwordForm.password" placeholder="Enter your phone number"/>
+                </FormLabel>
+                <Button color="primary" type="submit">Подтвердить пароль</Button>
             </form>
 
             <form v-if="step === 4" @submit.prevent="completeSignup">

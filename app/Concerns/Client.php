@@ -2,6 +2,7 @@
 
 use App\Models\Certificate;
 use App\Models\PromoCode;
+use App\Models\Social\TgUser;
 use App\Models\Social\VkGroup;
 use App\Models\Social\VkUser;
 use App\Models\Story;
@@ -85,5 +86,10 @@ trait Client
     public function vk_groups() : HasMany
     {
         return $this->hasMany(VkGroup::class);
+    }
+
+    public function tg_users() : HasMany
+    {
+        return $this->hasMany(TgUser::class);
     }
 }

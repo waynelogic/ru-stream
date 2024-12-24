@@ -9,13 +9,14 @@ use App\Notifications\Registered;
 use App\Services\StreamManagementService;
 use App\Notifications\SubscriptionChanged;
 use App\Services\SubscriptionManager;
+use App\Services\Telegram;
 
 class TestController extends Controller
 {
     public function index()
     {
-        $manager = app(SubscriptionManager::class);
-        $manager->renewAllEnding();
+        $obTg = Telegram::make(79897090215);
+        dd($obTg->channels->getAdminedPublicChannels());
 //        dd($obVideo->generatePoster());
 
 //        $command = "ls -la";

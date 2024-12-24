@@ -29,7 +29,7 @@ class StreamController extends Controller
             StreamType::VKPage => ['view' => 'Stream/VKPage', 'data' => []],
             StreamType::VKStories => ['view' => 'Stream/VKStories', 'data' => []],
             StreamType::VKGroup => ['view' => 'Stream/VKGroup', 'data' => $this->indexVKGroup()],
-            StreamType::Telegram => throw new \Exception('To be implemented'),
+            StreamType::Telegram => ['view' => 'Stream/TelegramGroup', 'data' => []],
         };
         $data['videoCount'] = $type->isStory() ? $this->user->stories()->count() : $this->user->videos()->count();
         $data['type'] = $type;

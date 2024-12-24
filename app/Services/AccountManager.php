@@ -11,7 +11,7 @@ class AccountManager
         return match ($type) {
             StreamType::VKPage, StreamType::VKStories => $user->vk_user(),
             StreamType::VKGroup => $user->vk_groups(),
-            StreamType::Telegram => throw new \Exception('To be implemented'),
+            StreamType::Telegram => $user->tg_users(),
         };
     }
 

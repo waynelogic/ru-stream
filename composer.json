@@ -22,7 +22,8 @@
         "tightenco/ziggy": "^2.0",
         "vkcom/vk-php-sdk": "^5.131",
         "waynelogic/filament-blog": "@dev",
-        "waynelogic/filament-cms": "@dev"
+        "waynelogic/filament-cms": "@dev",
+        "ext-iconv": "*"
     },
     "repositories": [
         {

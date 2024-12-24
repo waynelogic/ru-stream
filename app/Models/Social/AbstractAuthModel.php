@@ -2,7 +2,9 @@
 
 use App\Enums\StreamType;
 use App\Models\Stream;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 abstract class AbstractAuthModel extends Model {
@@ -43,5 +45,10 @@ abstract class AbstractAuthModel extends Model {
     public function streams() : MorphMany
     {
         return $this->morphMany(Stream::class, 'streamable');
+    }
+
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

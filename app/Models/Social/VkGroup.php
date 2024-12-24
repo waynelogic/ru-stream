@@ -34,7 +34,7 @@ class VkGroup extends AbstractAuthModel
         return $this->stopStream($stream);
     }
 
-    public function remove() : bool
+    public function remove(Stream $stream) : bool
     {
         if (isset($stream->payload->video_id)) {
             return $this->removeVideo($stream);
@@ -80,6 +80,8 @@ class VkGroup extends AbstractAuthModel
             'owner_id' => $stream->payload->owner_id,
         ]);
         $stream->payload = null;
+        $stream->save();
+        return true;
     }
 
     public function stopStream(Stream $stream): bool
