@@ -109,10 +109,15 @@ class Stream extends Model
     // RTMP
     public function startRtmp() : bool
     {
+        // Устанавливаем параметры RTMP
         $inputPath = $this->video->getMedia('videos')->first()->getPath();
         $outputUrl = $this->rtmp_url . $this->rtmp_key;
 
-        $command = "ffmpeg -re -i {$inputPath} -b:v 4000k -f flv {$outputUrl}";
+        // Экранируем параметры RTMP
+        $escapedInputPath = escapeshellarg($inputPath);
+        $escapedOutputUrl = escapeshellarg($outputUrl);
+
+        $command = "ffmpeg -re -i {$escapedInputPath} -b:v 4000k -f flv {$escapedOutputUrl}";
 
         $process = proc_open($command, [
             0 => ["pipe", "r"],
