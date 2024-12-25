@@ -53,7 +53,11 @@ const deleteVideo = () => {
     })
 }
 
-watch(form, () => form.file && (form.title = basename(form.file.name).slice(0, 50)))
+watch(() => form.file,(newFile) => {
+    if (newFile) {
+        form.title = basename(newFile.name).slice(0, 50);
+    }
+});
 </script>
 
 <template>
