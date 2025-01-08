@@ -31,16 +31,16 @@ const close = () => {
         @close="close"
     >
         <div class="px-6 py-4">
-            <div class="text-lg font-medium text-gray-900">
+            <div v-if="$slots.title" class="text-lg font-medium ">
                 <slot name="title" />
             </div>
 
-            <div class="mt-4 text-sm text-gray-600">
+            <div :class="[$slots.title && 'mt-4', 'text-sm text-gray-200']">
                 <slot name="content" />
             </div>
         </div>
 
-        <div class="flex flex-row justify-end px-6 py-4 bg-gray-100 text-end">
+        <div v-if="$slots.footer" class="flex flex-row justify-end px-6 py-4 bg-primary-900 text-end border-t border-white/20">
             <slot name="footer" />
         </div>
     </Modal>

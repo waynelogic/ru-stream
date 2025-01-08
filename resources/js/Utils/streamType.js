@@ -39,11 +39,11 @@ export const streamType = {
         }
     },
 
-    'telegram' : {
-        name: 'Группа Telegram',
-        handler: 'telegram',
-        icon: 'telegram',
-        link: '/streams/telegram',
+    'tg-channel' : {
+        name: 'Канал Telegram',
+        handler: 'tg-channel',
+        icon: 'tg-channel',
+        link: '/streams/tg-channel',
         labels: {
             accounts: 'Аккаунтов',
             streams: 'Стримов',

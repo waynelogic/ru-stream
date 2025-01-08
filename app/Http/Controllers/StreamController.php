@@ -25,12 +25,14 @@ class StreamController extends Controller
         $this->user = auth()->user();
 
         $subscription = $this->user->subscriptions()->where('type', $type->value)->first();
+
         ['view' => $view, 'data' => $data] = match ($type) {
             StreamType::VKPage => ['view' => 'Stream/VKPage', 'data' => []],
             StreamType::VKStories => ['view' => 'Stream/VKStories', 'data' => []],
             StreamType::VKGroup => ['view' => 'Stream/VKGroup', 'data' => $this->indexVKGroup()],
-            StreamType::Telegram => ['view' => 'Stream/TelegramGroup', 'data' => []],
+            StreamType::TgChannel => ['view' => 'Stream/TelegramChannel', 'data' => $this->indexTelegramChannel()],
         };
+
         $data['videoCount'] = $type->isStory() ? $this->user->stories()->count() : $this->user->videos()->count();
         $data['type'] = $type;
         $data['accounts'] = AccountManager::accounts($type, $this->user)->withStreams($type)->get();
@@ -43,6 +45,13 @@ class StreamController extends Controller
     {
         return [
             'vkAccounts' => Inertia::lazy(fn () => $this->user->vk_user()->get()->append('api_groups')),
+        ];
+    }
+
+    public function indexTelegramChannel()
+    {
+        return [
+            'tgChats' => Inertia::lazy(fn () => $this->user->tg_users()->get()->append('api_chats')),
         ];
     }
 

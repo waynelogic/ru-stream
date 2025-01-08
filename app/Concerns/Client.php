@@ -2,6 +2,7 @@
 
 use App\Models\Certificate;
 use App\Models\PromoCode;
+use App\Models\Social\TgChannel;
 use App\Models\Social\TgUser;
 use App\Models\Social\VkGroup;
 use App\Models\Social\VkUser;
@@ -91,5 +92,10 @@ trait Client
     public function tg_users() : HasMany
     {
         return $this->hasMany(TgUser::class);
+    }
+
+    public function tg_channels() : HasMany
+    {
+        return $this->hasMany(TgChannel::class);
     }
 }

@@ -24,6 +24,7 @@
     "dependencies": {
         "@phosphor-icons/vue": "^2.2.1",
         "dayjs": "^1.11.13",
+        "maska": "^3.0.4",
         "nprogress": "^0.2.0",
         "swiper": "^11.1.14",
         "tailwind-variants": "^0.3.0"

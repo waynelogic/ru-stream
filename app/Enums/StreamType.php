@@ -10,7 +10,7 @@ enum StreamType: string implements HasColor, HasLabel
     case VKPage = 'vk-page';
     case VKStories = 'vk-stories';
     case VKGroup = 'vk-group';
-    case Telegram = 'telegram';
+    case TgChannel = 'tg-channel';
 
     public function getLabel(): ?string
     {
@@ -18,7 +18,7 @@ enum StreamType: string implements HasColor, HasLabel
             self::VKPage => 'Страница ВКонтакте',
             self::VKStories => 'Истории ВКонтакте',
             self::VKGroup => 'Группа ВКонтакте',
-            self::Telegram => 'Telegram',
+            self::TgChannel => 'Канал Telegram',
         };
     }
 
@@ -28,7 +28,7 @@ enum StreamType: string implements HasColor, HasLabel
             self::VKPage => 'info',
             self::VKStories => 'warning',
             self::VKGroup => 'success',
-            self::Telegram => 'info',
+            self::TgChannel => 'info',
         };
     }
 
@@ -39,6 +39,7 @@ enum StreamType: string implements HasColor, HasLabel
             self::VKPage => 'is_in_page',
             self::VKStories => 'is_in_stories',
             self::VKGroup => 'in_dashboard',
+            self::TgChannel => 'is_in_channel',
             default => null
         };
     }

@@ -99,13 +99,9 @@ const closeModal = () => {
             </div>
 
             <!-- Log Out Other Devices Confirmation Modal -->
-            <DialogModal :show="confirmingLogout" @close="closeModal">
-                <template #title>
-                    Log Out Other Browser Sessions
-                </template>
-
+            <DialogModal :show="confirmingLogout" title="Выйти из других сеансов браузера" @close="closeModal">
                 <template #content>
-                    Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.
+                    Введите свой пароль, чтобы подтвердить, что вы хотите выйти из других сеансов браузера на всех ваших устройствах.
 
                     <div class="mt-4">
                         <TextInput
@@ -113,7 +109,7 @@ const closeModal = () => {
                             v-model="form.password"
                             type="password"
                             class="mt-1 block w-3/4"
-                            placeholder="Password"
+                            placeholder="Пароль"
                             autocomplete="current-password"
                             @keyup.enter="logoutOtherBrowserSessions"
                         />
@@ -124,7 +120,7 @@ const closeModal = () => {
 
                 <template #footer>
                     <SecondaryButton @click="closeModal">
-                        Cancel
+                        Отмена
                     </SecondaryButton>
 
                     <PrimaryButton
@@ -133,7 +129,7 @@ const closeModal = () => {
                         :disabled="form.processing"
                         @click="logoutOtherBrowserSessions"
                     >
-                        Log Out Other Browser Sessions
+                        Выйти из других сеансов браузера
                     </PrimaryButton>
                 </template>
             </DialogModal>

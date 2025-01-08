@@ -1,9 +1,17 @@
 <?php namespace App\Models\Social;
 
 use App\Enums\StreamType;
+use App\Services\Telegram;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class TgUser extends AbstractAuthModel
+class TgUser extends AbstractAuthModel implements HasMedia
 {
+    use InteractsWithMedia;
+
+    protected $casts = [
+        'phone' => 'integer'
+    ];
 
     public function scopeWithStreams($builder, StreamType $type)
     {
@@ -12,13 +20,32 @@ class TgUser extends AbstractAuthModel
         }]);
     }
 
+    public function getApiChatsAttribute() : array
+    {
+        $obTg = Telegram::make($this->phone);
+
+        $arChatList = [];
+
+        $chats = $obTg->channels->getAdminedPublicChannels()['chats'];
+
+        foreach ($chats as $chat) {
+            $arChatList[] = [
+                'id' => $chat['id'],
+                'title' => $chat['title'],
+                'username' => $chat['username'],
+            ];
+        }
+
+        return $arChatList;
+    }
+
     public function getViewNameAttribute(): string
     {
-        // TODO: Implement getViewNameAttribute() method.
+        return $this->name;
     }
 
     public function getViewAvatarAttribute(): string
     {
-        // TODO: Implement getViewAvatarAttribute() method.
+        return $this->getFirstMediaUrl('tg_avatars');
     }
 }

@@ -3,22 +3,23 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\Social\TgUser;
+use App\Services\Telegram;
+use App\Services\TryCatch;
 use danog\MadelineProto\API;
-use danog\MadelineProto\Settings\AppInfo;
+use danog\MadelineProto\Exception;
 use Illuminate\Http\Request;
-use Storage;
+use Inertia\Inertia;
+use danog\MadelineProto\RPCErrorException;
+use danog\MadelineProto\RPCError\PasswordHashInvalidError;
+
 class TelegramAuthController
 {
-    public function Client(int $phone = null)
+    public function Client(int $phone = null) : API
     {
         if (is_null($phone)) {
             $phone = session()->get('current_telegram_phone');
         }
-        $settings = (new AppInfo)
-            ->setApiId(config('madeline-proto.api_id'))
-            ->setApiHash(config('madeline-proto.api_hash'));
-
-        return new API(Storage::path('madeline-proto/' . $phone), $settings);
+        return Telegram::make($phone);
     }
 
     public function index(Request $request, $method)
@@ -30,25 +31,23 @@ class TelegramAuthController
         }
     }
 
-    public function sendPhoneNumber($request)
+    public function sendPhoneNumber(Request $request)
     {
         $request->validate([
             'phone' => 'required',
         ]);
+        $sPhoneNumber = $request->input('phone');
 
-        $phoneNumber = $request->input('phone');
-
-        $current_telegram_phone = preg_replace("/[^,.0-9]/", '', $phoneNumber);
-        session()->put('current_telegram_phone', $current_telegram_phone);
-
+        $intPhoneNumber = (int) preg_replace("/[^,.0-9]/", '', $sPhoneNumber);
+        session()->put('current_telegram_phone', $intPhoneNumber);
 
         try {
-            $this->Client($current_telegram_phone)->phoneLogin($phoneNumber);
-        } catch (\danog\MadelineProto\Exception $e) {
-            return back()->withError($e->getMessage());
+            $this->Client($intPhoneNumber)->phoneLogin($intPhoneNumber);
+        } catch (\Exception $e) {
+            return back()->flashError($e->getMessage());
         }
 
-        return back()->flashSuccess('Phone number sent');
+        return back()->flashSuccess('Код отправлен');
     }
 
     public function completePhoneLogin($request)
@@ -56,8 +55,14 @@ class TelegramAuthController
         $request->validate([
             'code' => 'required',
         ]);
+
         $code = $request->input('code');
-        $authorization = $this->Client()->completePhoneLogin($code);
+
+        try {
+            $authorization = $this->Client()->completePhoneLogin($code);
+        } catch (Exception $e) {
+            return back()->flashError($e->getMessage());
+        }
 
         if (isset($authorization['_']) && $authorization['_'] === 'account.password') {
             session()->put('data', [
@@ -77,19 +82,41 @@ class TelegramAuthController
     public function complete2faLogin(Request $request)
     {
         $password = $request->input('password');
-        $authorization = $this->Client()->complete2faLogin($password);
 
-        $obTgUser = TgUser::query()->where('phone', session()->get('current_telegram_phone'))->firstOrNew();
-
-        $arUser = $authorization['user'];
-        $obTgUser->fill([
-            'phone' => session()->get('current_telegram_phone'),
-            'user_id' => auth()->user()->id,
-            'tg_id' => $arUser['id'],
-            'name' => $arUser['username'],
-        ]);
-        $obTgUser->save();
+        try {
+            $authorization = $this->Client()->complete2faLogin($password);
+        } catch (Exception | \danog\MadelineProto\RPCErrorException $e) {
+            return back()->flashError($e->getMessage());
+        } catch (PasswordHashInvalidError $e) {
+            return back()->flashError($e->getMessage());
+        }
+        $this->createUser();
 
         return response()->json(['status' => 'Logged in']);
+    }
+
+    public function createUser()
+    {
+        $tg = $this->Client();
+        $phone = (int) session()->get('current_telegram_phone');
+
+        $obTgUser = TgUser::query()->where('phone', $phone)->firstOrNew();
+
+        $arUser = $tg->getSelf();
+
+        $obTgUser->fill([
+            'phone' => (int) session()->get('current_telegram_phone'),
+            'user_id' => (int) auth()->user()->id,
+            'tg_id' => (int) $arUser['id'],
+            'name' => $arUser['username'],
+        ]);
+
+        $photoInfo = $tg->getPropicInfo($obTgUser->tg_id);
+        $path = Telegram::path($phone, 'avatar.jpg');
+        $photoInfo->downloadToFile($path);
+        $obTgUser->clearMediaCollection('tg_avatars');
+        $obTgUser->addMedia($path)->toMediaCollection('tg_avatars');
+
+        $obTgUser->save();
     }
 }

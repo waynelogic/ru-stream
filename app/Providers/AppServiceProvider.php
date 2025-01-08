@@ -32,6 +32,6 @@ class AppServiceProvider extends ServiceProvider
         RedirectResponse::macro('flash', fn ($message) => $this->flashMessage('info', $message));
         RedirectResponse::macro('flashSuccess', fn ($message) => $this->flashMessage('success', $message));
         RedirectResponse::macro('flashWarning', fn ($message) => $this->flashMessage('warning', $message));
-        RedirectResponse::macro('flashError', fn ($message) => $this->flashMessage('error', $message));
+        RedirectResponse::macro('flashError', fn ($message) => $this->flashMessage('error', $message)->withErrors(['error' => $message]));
     }
 }

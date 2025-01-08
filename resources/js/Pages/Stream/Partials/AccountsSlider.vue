@@ -79,7 +79,7 @@ function openStreamCreator(account_id) {
             <div v-if="allowAccountAdding" class="swiper-slide">
                 <button @click="openAttach" class="w-full flex items-center box p-3 rounded-xl border-2 duration-300 hover:bg-primary-800">
                     <PhPlusCircle class="size-10"/>
-                    <span class="ml-2">Добавить аккаунт</span>
+                    <span class="ml-2">Прикрепить аккаунт</span>
                 </button>
             </div>
         </Slider>

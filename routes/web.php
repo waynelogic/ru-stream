@@ -5,7 +5,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-
 Route::get('/', [Controllers\HomeController::class, 'index'])->name('home');
 Route::get('plans', [Controllers\PricingPlanController::class, 'index'])->name('plans.index');
 Route::get('cases', [Controllers\CaseController::class, 'index'])->name('cases');

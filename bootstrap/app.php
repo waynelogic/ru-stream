@@ -21,5 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->reportable(function (\danog\MadelineProto\Exception $e) {
+            return back()->flashError($e->getMessage());
+        });
     })->create();

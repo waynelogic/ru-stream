@@ -41,6 +41,10 @@ abstract class AbstractAuthModel extends Model {
         ]);
         return true;
     }
+    public function scopeWithStreams($builder, StreamType $type)
+    {
+        return $builder->with('streams.video');
+    }
 
     public function streams() : MorphMany
     {

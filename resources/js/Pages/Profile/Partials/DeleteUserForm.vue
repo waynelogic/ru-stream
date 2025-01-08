@@ -60,13 +60,9 @@ const closeModal = () => {
             </div>
 
             <!-- Delete Account Confirmation Modal -->
-            <DialogModal :show="confirmingUserDeletion" @close="closeModal">
-                <template #title>
-                    Delete Account
-                </template>
-
+            <DialogModal title="Удалить аккаунт" :show="confirmingUserDeletion" @close="closeModal">
                 <template #content>
-                    Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.
+                    Вы уверены, что хотите удалить свою учетную запись? После удаления вашей учетной записи все ее ресурсы и данные будут удалены без возможности восстановления. Пожалуйста, введите свой пароль, чтобы подтвердить, что вы хотите навсегда удалить свою учетную запись.
 
                     <div class="mt-4">
                         <TextInput
@@ -74,7 +70,7 @@ const closeModal = () => {
                             v-model="form.password"
                             type="password"
                             class="mt-1 block w-3/4"
-                            placeholder="Password"
+                            placeholder="Пароль"
                             autocomplete="current-password"
                             @keyup.enter="deleteUser"
                         />
@@ -85,7 +81,7 @@ const closeModal = () => {
 
                 <template #footer>
                     <SecondaryButton @click="closeModal">
-                        Cancel
+                        Отмена
                     </SecondaryButton>
 
                     <DangerButton
@@ -94,7 +90,7 @@ const closeModal = () => {
                         :disabled="form.processing"
                         @click="deleteUser"
                     >
-                        Delete Account
+                        Удалить аккаунт
                     </DangerButton>
                 </template>
             </DialogModal>

@@ -2,6 +2,7 @@
 
 use App\Enums\StreamType;
 use App\Models\User;
+use Exception;
 
 class AccountManager
 {
@@ -11,12 +12,12 @@ class AccountManager
         return match ($type) {
             StreamType::VKPage, StreamType::VKStories => $user->vk_user(),
             StreamType::VKGroup => $user->vk_groups(),
-            StreamType::Telegram => $user->tg_users(),
+            StreamType::TgChannel => $user->tg_channels(),
         };
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function account(StreamType $type, int $account_id, ?User $user = null)
     {

@@ -7,6 +7,8 @@ import InputLabel from "@/Components/Form/InputLabel.vue";
 import InputError from "@/Components/Form/InputError.vue";
 import Button from "@/Components/Actions/Button.vue";
 import FormLabel from "@/Components/Form/FormLabel.vue";
+import { vMaska } from "maska/vue"
+
 
 const page = usePage();
 const data = computed(() => page.props.data);
@@ -18,9 +20,13 @@ const sendPhoneForm = useForm({
 });
 const sendPhoneNumber = () => {
     sendPhoneForm.post(route('auth.telegram', 'sendPhoneNumber'),{
+        onError: () => {
+            sendPhoneForm.reset();
+            step.value = 1;
+        },
         onSuccess: () => {
             step.value = 2;
-        }
+        },
     });
 }
 
@@ -37,6 +43,10 @@ function completePhoneLogin() {
             } else {
                 alert('Logged in');
             }
+        },
+        onError: () => {
+            codeForm.reset();
+            step.value = 2;
         }
     });
 }
@@ -78,11 +88,10 @@ async function completeSignup() {
 
 <template>
     <AppLayout title="Telegram группа">
-        {{ data }}
         <div class="box p-10">
             <form class="flex flex-col" v-if="step === 1" @submit.prevent="sendPhoneNumber">
                 <InputLabel>Телефон</InputLabel>
-                <TextInput v-model="sendPhoneForm.phone" placeholder="Enter your phone number"/>
+                <TextInput v-maska="'+7 (###) ###-##-##'" v-model="sendPhoneForm.phone" placeholder="Enter your phone number"/>
                 <InputError :message="sendPhoneForm.errors.phone"/>
                 <Button color="primary" type="submit">Получить код</Button>
             </form>
